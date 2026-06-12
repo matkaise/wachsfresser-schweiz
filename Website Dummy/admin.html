@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <title>Admin | Wachsfresser Schweiz</title>
+  <link rel="stylesheet" href="styles.css?v=20260612-3"/>
+  <link rel="stylesheet" href="shop-styles.css?v=20260612-3"/>
+  <link rel="stylesheet" href="admin.css?v=20260612-1"/>
+</head>
+<body data-theme="warm" data-type="editorial">
+  <main class="admin-shell">
+    <header class="admin-head">
+      <a class="brand result-brand" href="Wachsfresser.html">
+        <span class="brand-mark"></span>
+        <span>Wachsfresser</span>
+      </a>
+      <div>
+        <span class="idx">Admin</span>
+        <h1>Bestellungen</h1>
+      </div>
+    </header>
+
+    <section class="admin-login" id="admin-login">
+      <p>
+        Wenn Cloudflare Access aktiv ist, reicht dein Login. Für lokale Tests kannst du den Admin-Token aus
+        <code>ADMIN_TOKEN</code> eintragen.
+      </p>
+      <div class="admin-token-row">
+        <input id="admin-token" type="password" placeholder="Admin-Token"/>
+        <button id="save-token" class="btn-primary">Token speichern</button>
+      </div>
+    </section>
+
+    <section class="admin-grid">
+      <div class="admin-panel">
+        <div class="admin-panel-head">
+          <h2>Offene Bestellungen</h2>
+          <button id="refresh-orders" class="btn-back">Aktualisieren</button>
+        </div>
+        <div id="orders-list" class="orders-list"></div>
+      </div>
+
+      <div class="admin-panel">
+        <div class="admin-panel-head">
+          <h2>Details</h2>
+        </div>
+        <div id="order-detail" class="order-detail empty">
+          Wähle eine Bestellung aus.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="admin.js?v=20260612-1"></script>
+</body>
+</html>

@@ -5,11 +5,20 @@
   "description": "Lokaler Wachsfresser-Shop mit Stripe Checkout.",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "cf:dev": "wrangler dev",
+    "cf:deploy": "wrangler deploy",
+    "cf:d1:create": "wrangler d1 create wachsfresser-db",
+    "cf:d1:migrate:local": "wrangler d1 migrations apply wachsfresser-db --local",
+    "cf:d1:migrate:remote": "wrangler d1 migrations apply wachsfresser-db --remote",
+    "cf:queue:create": "wrangler queues create wachsfresser-email-jobs && wrangler queues create wachsfresser-email-jobs-dlq"
   },
   "dependencies": {
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "stripe": "^22.2.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.100.0"
   }
 }

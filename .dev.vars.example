@@ -1,0 +1,15 @@
+STRIPE_SECRET_KEY=sk_test_xxx
+STRIPE_WEBHOOK_SECRET=whsec_xxx
+ADMIN_TOKEN=local-admin-token
+
+# Optional, wenn du statt Cloudflare Send Email Binding Resend nutzen willst.
+RESEND_API_KEY=re_xxx
+
+# Lokal überschreiben, wenn du nicht die Produktionsdomain nutzen willst.
+SITE_URL=http://localhost:8787
+FROM_EMAIL="Wachsfresser Schweiz <hallo@wachsfresser-schweiz.ch>"
+REPLY_TO_EMAIL=hallo@wachsfresser-schweiz.ch
+ADMIN_EMAIL=hallo@wachsfresser-schweiz.ch
+ADMIN_EMAILS=hallo@wachsfresser-schweiz.ch
+SHIPPING_CH_CENTS=0
+SHIPPING_EU_CENTS=0

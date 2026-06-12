@@ -1,0 +1,53 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "wachsfresser-schweiz",
+  "main": "src/worker.mjs",
+  "compatibility_date": "2026-06-12",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "./Website Dummy",
+    "binding": "ASSETS",
+    "html_handling": "none",
+    "run_worker_first": ["/api/*", "/admin*"]
+  },
+  "vars": {
+    "SITE_URL": "https://wachsfresser-schweiz.ch",
+    "FROM_EMAIL": "Wachsfresser Schweiz <hallo@wachsfresser-schweiz.ch>",
+    "REPLY_TO_EMAIL": "hallo@wachsfresser-schweiz.ch",
+    "ADMIN_EMAIL": "hallo@wachsfresser-schweiz.ch",
+    "ADMIN_EMAILS": "hallo@wachsfresser-schweiz.ch",
+    "SHIPPING_CH_CENTS": "0",
+    "SHIPPING_EU_CENTS": "0"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "wachsfresser-db"
+    }
+  ],
+  "queues": {
+    "producers": [
+      {
+        "queue": "wachsfresser-email-jobs",
+        "binding": "EMAIL_QUEUE"
+      }
+    ],
+    "consumers": [
+      {
+        "queue": "wachsfresser-email-jobs",
+        "max_batch_size": 10,
+        "max_batch_timeout": 30,
+        "max_retries": 5,
+        "dead_letter_queue": "wachsfresser-email-jobs-dlq"
+      }
+    ]
+  },
+  "send_email": [
+    {
+      "name": "EMAIL"
+    }
+  ]
+}
