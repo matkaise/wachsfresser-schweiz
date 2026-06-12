@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <title>Zahlung erfolgreich | Wachsfresser Schweiz</title>
+  <link rel="stylesheet" href="styles.css?v=20260612-3"/>
+  <link rel="stylesheet" href="shop-styles.css?v=20260612-3"/>
+</head>
+<body data-theme="warm" data-type="editorial">
+  <main class="checkout-result">
+    <a class="brand result-brand" href="Wachsfresser.html">
+      <span class="brand-mark"></span>
+      <span>Wachsfresser</span>
+    </a>
+    <section class="result-panel">
+      <span class="idx">Stripe Checkout</span>
+      <h1>Danke, deine Zahlung ist eingegangen.</h1>
+      <p id="result-copy">
+        Wir prüfen die Bestellung und melden uns mit den nächsten Schritten.
+      </p>
+      <dl class="result-details" id="result-details"></dl>
+      <div class="result-actions">
+        <a class="btn-primary" href="shop.html">Zurück zum Shop →</a>
+        <a class="btn-back" href="Wachsfresser.html">Startseite</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    localStorage.removeItem('wf_cart');
+
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    const details = document.getElementById('result-details');
+    const copy = document.getElementById('result-copy');
+
+    if (sessionId) {
+      fetch(`/api/checkout-session/${encodeURIComponent(sessionId)}`)
+        .then(response => response.ok ? response.json() : null)
+        .then(session => {
+          if (!session) return;
+          const amount = typeof session.amountTotal === 'number'
+            ? `CHF ${(session.amountTotal / 100).toFixed(2)}`
+            : '';
+          copy.textContent = session.paymentStatus === 'paid'
+            ? 'Stripe hat die Zahlung bestätigt. Die Bestellung ist bereit für die weitere Bearbeitung.'
+            : 'Stripe hat die Bestellung zurückgemeldet. Der Zahlungsstatus wird noch geprüft.';
+          details.innerHTML = [
+            ['Bestellreferenz', session.orderRef],
+            ['Zahlungsstatus', session.paymentStatus],
+            ['Betrag', amount],
+            ['E-Mail', session.customerEmail],
+          ].filter(([, value]) => value).map(([label, value]) => (
+            `<div><dt>${label}</dt><dd>${value}</dd></div>`
+          )).join('');
+        })
+        .catch(() => {});
+    }
+  </script>
+</body>
+</html>

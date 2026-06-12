@@ -1,0 +1,11 @@
+node_modules/
+.env
+orders/
+npm-debug.log*
+
+# Lokale Arbeits-/Generierungsdateien, nicht für den lauffähigen Shop nötig
+Bilder/
+tmp_contact_sheets/
+Website Dummy/uploads/
+Website Dummy/assets/*.png
+Website Dummy/assets/eiger-reference-*.jpg
