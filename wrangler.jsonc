@@ -25,7 +25,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "wachsfresser-db"
+      "database_name": "wachsfresser-db",
+      "database_id": "2f5cf692-7c93-4253-9f97-79972a96ba79"
     }
   ],
   "queues": {
