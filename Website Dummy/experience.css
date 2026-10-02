@@ -508,7 +508,10 @@
 .product-badge,
 .product-quick { z-index: 2; }
 .product-quick { box-shadow: 0 12px 30px -16px rgba(0, 0, 0, .35); }
-.add-btn { transition: background .3s, transform .3s var(--ease-out); }
+.add-btn { white-space: nowrap; transition: background .3s, transform .3s var(--ease-out); }
+.product-quick .label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.home-products .product-quick { justify-content: center; }
+.home-products .product-quick .label { display: none; }
 .add-btn:active { transform: scale(.95); }
 @media (hover: none) {
   .product-quick { transform: translateY(0); }
