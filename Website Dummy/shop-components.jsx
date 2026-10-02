@@ -6,12 +6,15 @@ function formatPrice(value) {
 }
 
 /* === Product Card (used in shop grid) === */
-function ProductCard({ product, onAdd, onOpen, href }) {
+function ProductCard({ product, onAdd, onOpen, href, index = 0 }) {
   const [added, setAdded] = useState(false);
+  const mediaRef = useRef(null);
+  const imgRef = useRef(null);
+  useEffect(() => window.WFMotion ? WFMotion.tilt(mediaRef.current, 6) : undefined, []);
   const handleAdd = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    onAdd(product);
+    onAdd(product, imgRef.current);
     setAdded(true);
     setTimeout(() => setAdded(false), 1400);
   };
@@ -29,15 +32,17 @@ function ProductCard({ product, onAdd, onOpen, href }) {
   const linkHref = href || `product.html?id=${product.id}`;
 
   return (
-    <Reveal className="product">
+    <Reveal className="product" delay={(index % 4) * 90}>
       <a href={linkHref} onClick={handleClick} style={{ display: 'block' }}>
-        <div className="product-media">
+        <div className="product-media" ref={mediaRef}>
           <img
+            ref={imgRef}
             src={product.img}
             alt={product.name}
             style={{ objectPosition: objectPos, transform: scale }}
             loading="lazy"
           />
+          <span className="product-glare" aria-hidden="true"></span>
           {product.badge && <span className="product-badge">{product.badge}</span>}
           <div className="product-quick">
             <span className="label">Schnell hinzufügen</span>
@@ -112,8 +117,8 @@ function ShopGrid({ onAdd, onOpen }) {
           {filtered.length === 0 && (
             <div className="shop-empty">Keine Stücke in dieser Kategorie.</div>
           )}
-          {filtered.map(p => (
-            <ProductCard key={p.id} product={p} onAdd={onAdd} onOpen={onOpen} />
+          {filtered.map((p, i) => (
+            <ProductCard key={p.id} product={p} onAdd={onAdd} onOpen={onOpen} index={i} />
           ))}
         </div>
 
@@ -135,6 +140,7 @@ function ShopGrid({ onAdd, onOpen }) {
 function ProductDetail({ product, onClose, onAdd }) {
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  const imgRef = useRef(null);
 
   useEffect(() => {
     if (product) {
@@ -150,7 +156,7 @@ function ProductDetail({ product, onClose, onAdd }) {
   }, [onClose]);
 
   const handleAdd = () => {
-    for (let i = 0; i < qty; i++) onAdd(product);
+    onAdd(product, imgRef.current, qty);
     setAdded(true);
     setTimeout(() => setAdded(false), 1400);
   };
@@ -169,6 +175,7 @@ function ProductDetail({ product, onClose, onAdd }) {
             <div className="detail-grid" style={{ marginTop: -50 }}>
               <div className="detail-media">
                 <img
+                  ref={imgRef}
                   src={product.img}
                   alt={product.name}
                   style={{ objectPosition: objectPos }}

@@ -5,6 +5,26 @@ function ProductPage({ product, onAdd }) {
   const [qty, setQty] = useStatePP(1);
   const [added, setAdded] = useStatePP(false);
   const [view, setView] = useStatePP(0);
+  const mainImgRef = React.useRef(null);
+  const rootRef = React.useRef(null);
+
+  // Galerie: weiche Überblendung beim Bildwechsel (ohne Transform, der Bildausschnitt bleibt)
+  useEffectPP(() => {
+    if (!window.WFMotion || !WFMotion.enabled || !mainImgRef.current) return;
+    WFMotion.gsap.fromTo(mainImgRef.current, { opacity: 0, filter: 'blur(10px)' }, { opacity: 1, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out', clearProps: 'filter' });
+  }, [view]);
+
+  // Infos staffeln sich beim Laden herein
+  useEffectPP(() => {
+    if (!window.WFMotion || !product) return undefined;
+    return WFMotion.scope(rootRef.current, () => {
+      const { gsap } = WFMotion;
+      gsap.from('.pp-info > *', { y: 28, opacity: 0, duration: 1, stagger: 0.06, ease: 'power3.out', delay: 0.1 });
+      gsap.from('.pp-main-img', { clipPath: 'inset(6% 6% 6% 6%)', duration: 1.4, ease: 'expo.out' });
+      const magnet = WFMotion.magnetic(document.querySelector('.pp-actions .add-big'), 0.15);
+      return magnet;
+    });
+  }, [product && product.id]);
 
   const gallery = useMemoPP(() => {
     if (!product) return [];
@@ -61,7 +81,7 @@ function ProductPage({ product, onAdd }) {
   }
 
   const handleAdd = () => {
-    for (let i = 0; i < qty; i++) onAdd(product);
+    onAdd(product, mainImgRef.current, qty);
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
   };
@@ -71,7 +91,7 @@ function ProductPage({ product, onAdd }) {
   const isEiger = product.category === 'Eiger';
 
   return (
-    <section className="pp">
+    <section className="pp" ref={rootRef}>
       <div className="container">
         <nav className="pp-crumbs" aria-label="Breadcrumb">
           <a href="Wachsfresser.html">Start</a>
@@ -100,6 +120,7 @@ function ProductPage({ product, onAdd }) {
             <div className="pp-main-img">
               <img
                 key={view}
+                ref={mainImgRef}
                 src={current.src}
                 alt={product.name}
                 style={{ objectPosition: current.pos, transform: current.scale }}

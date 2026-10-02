@@ -16,10 +16,7 @@ function ProductPageApp() {
     if (product) document.title = `${product.name} | Wachsfresser Schweiz`;
   }, [product?.id]);
 
-  const onAdd = (p) => {
-    cart.add(p);
-    setCartOpen(true);
-  };
+  const onAdd = useAddToCart(cart, () => setCartOpen(true));
 
   const goCheckout = () => {
     setCartOpen(false);

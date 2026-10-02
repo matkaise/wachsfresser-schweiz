@@ -11,10 +11,7 @@ function ShopApp() {
     document.body.dataset.type = 'editorial';
   }, []);
 
-  const onAdd = (product) => {
-    cart.add(product);
-    setCartOpen(true);
-  };
+  const onAdd = useAddToCart(cart, () => setCartOpen(true));
 
   const goCheckout = () => {
     setCartOpen(false);
