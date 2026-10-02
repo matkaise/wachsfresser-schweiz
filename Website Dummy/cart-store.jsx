@@ -41,4 +41,23 @@ function useCart() {
   return { items, add, setQty, clear, count };
 }
 
+/* Hinzufügen mit Flug-Animation: erst fliegt das Bild, dann zählt der Korb */
+function useAddToCart(cart, openCart) {
+  return (product, sourceEl, qty = 1) => {
+    const commit = () => {
+      for (let i = 0; i < qty; i++) cart.add(product);
+    };
+    if (window.WFMotion && WFMotion.enabled && sourceEl) {
+      WFMotion.flyToCart(sourceEl).then(() => {
+        commit();
+        setTimeout(openCart, 380);
+      });
+    } else {
+      commit();
+      openCart();
+    }
+  };
+}
+
 window.useCart = useCart;
+window.useAddToCart = useAddToCart;

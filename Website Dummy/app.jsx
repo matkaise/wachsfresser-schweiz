@@ -4,7 +4,7 @@ const { useState, useEffect } = React;
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "theme": "warm",
   "type": "editorial",
-  "hero": "editorial"
+  "hero": "flame"
 }/*EDITMODE-END*/;
 
 function App() {
@@ -12,16 +12,14 @@ function App() {
   const cart = useCart();
   const [cartOpen, setCartOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [selection, setSelection] = useState({ model: 'saentis', color: 'creme' });
 
   useEffect(() => {
     document.body.dataset.theme = tweaks.theme;
     document.body.dataset.type = tweaks.type;
   }, [tweaks.theme, tweaks.type]);
 
-  const onAdd = (product) => {
-    cart.add(product);
-    setCartOpen(true);
-  };
+  const onAdd = useAddToCart(cart, () => setCartOpen(true));
 
   const goCheckout = () => {
     setCartOpen(false);
@@ -33,11 +31,18 @@ function App() {
   return (
     <>
       <Nav cartCount={cart.count} onCartOpen={() => setCartOpen(true)} />
-      <Hero variant={tweaks.hero} />
+      {tweaks.hero === 'flame'
+        ? <Hero3D selection={selection} onSelect={setSelection} onAdd={onAdd} />
+        : <Hero variant={tweaks.hero} />}
       <Strip />
       <Featured onAdd={onAdd} />
       <About />
+      <CtaBand />
       <Footer />
+
+      {tweaks.hero === 'flame' && (
+        <StickyBuyBar selection={selection} onAdd={onAdd} hidden={cartOpen || checkoutOpen} />
+      )}
 
       <CartDrawer
         open={cartOpen}
@@ -81,6 +86,7 @@ function App() {
             value={tweaks.hero}
             onChange={v => setTweak('hero', v)}
             options={[
+              { value: 'flame', label: '3D' },
               { value: 'editorial', label: 'Editorial' },
               { value: 'lifestyle', label: 'Lifestyle' },
               { value: 'split', label: 'Split' },
