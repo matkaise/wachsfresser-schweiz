@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Wachsfresser · Schweizer Raster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap"/>
+<style>
+/* Layout: strenges 12-Spalten-Raster, linksbündig, Typografie als Bild, Signalrot als einziger Akzent */
+:root {
+  --paper: #f4f4f1;
+  --paper-2: #e9e9e4;
+  --ink: #121314;
+  --ink-2: #4b4d50;
+  --red: #d42a20;
+  --line: rgba(18, 19, 20, .14);
+  --font: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --gut: clamp(16px, 3vw, 40px);
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  color-scheme: light;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+.wrap { max-width: 1480px; margin: 0 auto; padding-inline: var(--gut); }
+.grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gut); }
+.label { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* Navigation */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.nav .grid { align-items: center; min-height: 64px; }
+.brand { grid-column: 1 / span 4; display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; letter-spacing: -.01em; }
+.brand i { width: 14px; height: 14px; background: var(--red); display: inline-block; }
+.nav-links { grid-column: 5 / span 5; display: flex; gap: 28px; list-style: none; }
+.nav-links a { position: relative; padding-block: 6px; }
+.nav-links a::after { content: ''; position: absolute; left: 0; right: 100%; bottom: 0; height: 2px; background: var(--red); transition: right .4s var(--ease); }
+.nav-links a:hover::after { right: 0; }
+.cart-btn { grid-column: 10 / span 3; justify-self: end; display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; background: var(--ink); color: var(--paper); position: relative; }
+.cart-count { min-width: 22px; height: 22px; display: inline-grid; place-items: center; background: var(--red); color: #fff; font-size: 12px; font-weight: 700; }
+.cart-btn.is-bumped::after { content: ''; position: absolute; inset: -5px; border: 2px solid var(--red); animation: ring .7s var(--ease) forwards; }
+@keyframes ring { from { opacity: 1; } to { opacity: 0; transform: scale(1.25); } }
+
+/* Hero */
+.hero { position: relative; padding-block: clamp(28px, 4vw, 56px) clamp(56px, 7vw, 96px); }
+.lines { position: absolute; inset: 0; pointer-events: none; }
+.lines .wrap, .lines .grid { height: 100%; }
+.lines span { border-left: 1px solid var(--line); height: 100%; transform-origin: top; }
+.lines span:last-child { border-right: 1px solid var(--line); }
+.hero-meta { position: relative; padding-bottom: 18px; margin-bottom: clamp(16px, 2vw, 28px); border-bottom: 2px solid var(--ink); }
+.hero-meta > div:nth-child(1) { grid-column: 1 / span 3; }
+.hero-meta > div:nth-child(2) { grid-column: 4 / span 3; }
+.hero-meta > div:nth-child(3) { grid-column: 7 / span 3; }
+.hero-meta > div:nth-child(4) { grid-column: 10 / span 3; text-align: right; }
+.hero-meta strong { display: block; font-size: 15px; font-weight: 600; letter-spacing: 0; text-transform: none; }
+.hero-meta span { color: var(--ink-2); }
+.headline { position: relative; font-weight: 850; font-stretch: 112%; font-size: clamp(64px, 15.5vw, 236px); line-height: .82; letter-spacing: -.045em; margin-left: -.04em; }
+.headline .row { display: block; overflow: hidden; padding-bottom: .04em; }
+.headline .ch { display: inline-block; }
+.headline .dot { color: var(--red); }
+.hero-body { position: relative; margin-top: clamp(32px, 4vw, 56px); align-items: start; }
+.hero-copy { grid-column: 1 / span 4; display: grid; gap: 24px; }
+.hero-copy p { font-size: 18px; line-height: 1.5; max-width: 34ch; }
+.hero-copy .label { color: var(--red); }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn { display: inline-flex; align-items: center; gap: 14px; padding: 16px 22px; font-weight: 600; font-size: 15px; transition: background .3s, color .3s; }
+.btn-red { background: var(--red); color: #fff; }
+.btn-red:hover { background: var(--ink); }
+.btn-line { box-shadow: inset 0 0 0 2px var(--ink); }
+.btn-line:hover { background: var(--ink); color: var(--paper); }
+.btn .arr { transition: transform .4s var(--ease); }
+.btn:hover .arr { transform: translateX(4px); }
+.hero-fig { grid-column: 6 / span 7; }
+.hero-fig .frame { aspect-ratio: 16 / 10; overflow: hidden; background: var(--paper-2); }
+.hero-fig img { width: 100%; height: 100%; object-fit: cover; }
+figcaption { display: flex; justify-content: space-between; gap: 16px; margin-top: 10px; font-size: 13px; color: var(--ink-2); }
+
+/* Laufband */
+.ticker { background: var(--ink); color: var(--paper); overflow: hidden; padding-block: 14px; }
+.ticker-track { display: flex; white-space: nowrap; width: max-content; animation: tick 40s linear infinite; }
+.ticker-track.is-gsap { animation: none; }
+.ticker-track > span { display: inline-flex; gap: 40px; padding-right: 40px; font-weight: 600; font-size: 15px; letter-spacing: .02em; }
+.ticker-track b { color: var(--red); }
+@keyframes tick { to { transform: translateX(-50%); } }
+
+/* Fahrplan / Kollektion */
+.section { padding-block: clamp(64px, 9vw, 128px); }
+.sec-head { align-items: end; margin-bottom: clamp(24px, 3vw, 40px); }
+.sec-head .label { grid-column: 1 / span 3; color: var(--red); align-self: start; padding-top: 10px; }
+.sec-head h2 { grid-column: 4 / span 9; font-weight: 800; font-stretch: 105%; font-size: clamp(36px, 5.4vw, 80px); line-height: .95; letter-spacing: -.035em; text-wrap: balance; }
+.board { border-top: 2px solid var(--ink); }
+.board-head, .board-row { display: grid; grid-template-columns: 64px 1.3fr 1fr 1.2fr 1.3fr .9fr 150px; gap: var(--gut); align-items: center; }
+.board-head { padding-block: 12px; border-bottom: 1px solid var(--ink); color: var(--ink-2); }
+.board-row { position: relative; padding-block: 16px; border-bottom: 1px solid var(--line); transition: background .25s, color .25s; }
+.board-row:hover { background: var(--ink); color: var(--paper); }
+.board-row:hover .muted { color: color-mix(in srgb, var(--paper) 70%, transparent); }
+.board-row .thumb { width: 64px; height: 64px; object-fit: cover; background: var(--paper-2); }
+.board-row .model { font-size: clamp(22px, 2.4vw, 34px); font-weight: 800; letter-spacing: -.02em; }
+.board-row .muted { color: var(--ink-2); transition: color .25s; }
+.board-row .price { font-size: 20px; font-weight: 700; }
+.board-row .warn { display: inline-flex; align-items: center; gap: 8px; }
+.board-row .warn::before { content: ''; width: 8px; height: 8px; background: var(--red); }
+.add { justify-self: end; padding: 12px 16px; font-weight: 600; background: var(--paper-2); color: var(--ink); white-space: nowrap; transition: background .25s, color .25s; }
+.board-row:hover .add { background: var(--red); color: #fff; }
+.preview { position: fixed; left: 0; top: 0; width: 280px; aspect-ratio: 4 / 5; pointer-events: none; z-index: 40; overflow: hidden; opacity: 0; transform: scale(.8); transition: opacity .3s; }
+.preview img { width: 100%; height: 100%; object-fit: cover; }
+.preview.on { opacity: 1; }
+
+/* Prinzip */
+.steps { border-top: 2px solid var(--ink); }
+.step { grid-column: span 3; padding-top: 20px; display: grid; gap: 12px; align-content: start; }
+.step .n { font-weight: 850; font-stretch: 125%; font-size: clamp(64px, 8vw, 120px); line-height: .8; color: var(--paper-2); -webkit-text-stroke: 2px var(--ink); }
+.step h3 { font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
+.step p { color: var(--ink-2); max-width: 30ch; }
+
+/* Abbildungen */
+.figs { align-items: end; row-gap: 40px; }
+.figs figure:nth-child(1) { grid-column: 1 / span 5; }
+.figs figure:nth-child(2) { grid-column: 7 / span 6; }
+.figs .frame { overflow: hidden; background: var(--paper-2); }
+.figs figure:nth-child(1) .frame { aspect-ratio: 4 / 5; }
+.figs figure:nth-child(2) .frame { aspect-ratio: 1 / 1; }
+.figs img { width: 100%; height: 100%; object-fit: cover; }
+.quote { grid-column: 7 / span 6; font-size: clamp(22px, 2.4vw, 32px); font-weight: 500; line-height: 1.25; letter-spacing: -.01em; }
+.quote em { font-style: normal; color: var(--red); }
+
+/* Abschluss */
+.cta { background: var(--red); color: #fff; padding-block: clamp(64px, 9vw, 128px); }
+.cta h2 { grid-column: 1 / span 8; font-weight: 850; font-stretch: 112%; font-size: clamp(56px, 10vw, 160px); line-height: .85; letter-spacing: -.045em; }
+.cta-side { grid-column: 9 / span 4; align-self: end; display: grid; gap: 20px; }
+.cta-side p { font-size: 18px; }
+.cta .btn { background: #fff; color: var(--ink); }
+.cta .btn:hover { background: var(--ink); color: #fff; }
+.cta .btn-line { background: transparent; color: #fff; box-shadow: inset 0 0 0 2px #fff; }
+
+.foot { padding-block: 32px 48px; font-size: 13px; color: var(--ink-2); }
+.foot .grid > div:nth-child(1) { grid-column: 1 / span 4; color: var(--ink); font-weight: 700; }
+.foot .grid > div:nth-child(2) { grid-column: 5 / span 4; }
+.foot .grid > div:nth-child(3) { grid-column: 9 / span 4; text-align: right; }
+
+.fly-ghost { position: fixed; z-index: 400; background-size: cover; background-position: center; pointer-events: none; }
+.mk-toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 160%); background: var(--ink); color: var(--paper); padding: 14px 20px; font-weight: 600; z-index: 60; transition: transform .5s var(--ease); max-width: calc(100vw - 32px); }
+.mk-toast.show { transform: translate(-50%, 0); }
+
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .brand { grid-column: 1 / span 7; }
+  .cart-btn { grid-column: 8 / span 5; }
+  .hero-meta > div { grid-column: span 6 !important; text-align: left !important; margin-bottom: 10px; }
+  .hero-copy, .hero-fig, .sec-head .label, .sec-head h2, .quote, .cta h2, .cta-side { grid-column: 1 / -1; }
+  .hero-fig { margin-top: 32px; }
+  .figs figure:nth-child(1), .figs figure:nth-child(2) { grid-column: 1 / -1; }
+  .step { grid-column: span 6; padding-bottom: 24px; }
+  .board-head { display: none; }
+  .board-row { grid-template-columns: 64px 1fr auto; row-gap: 4px; }
+  .board-row > :nth-child(3), .board-row > :nth-child(4), .board-row > :nth-child(5) { grid-column: 2; font-size: 14px; }
+  .board-row > :nth-child(6) { grid-column: 3; grid-row: 1; }
+  .board-row .add { grid-column: 3; grid-row: 2 / span 3; align-self: end; }
+  .board-row .thumb { grid-row: 1 / span 4; align-self: start; }
+  .preview { display: none; }
+  .cta-side { margin-top: 32px; }
+  .foot .grid > div { grid-column: 1 / -1 !important; text-align: left !important; margin-bottom: 8px; }
+}
+@media (max-width: 520px) { .step { grid-column: 1 / -1; } }
+@media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap grid">
+    <a class="brand" href="#top"><i aria-hidden="true"></i>Wachsfresser</a>
+    <ul class="nav-links label">
+      <li><a href="#kollektion">Kollektion</a></li>
+      <li><a href="#prinzip">Prinzip</a></li>
+      <li><a href="#manufaktur">Manufaktur</a></li>
+    </ul>
+    <button class="cart-btn label" type="button" aria-label="Warenkorb">Warenkorb <span class="cart-count num">0</span></button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="lines" aria-hidden="true"><div class="wrap grid">
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div></div>
+    <div class="wrap">
+      <div class="hero-meta grid label">
+        <div><span>Herkunft</span><strong>Salmsach, Thurgau</strong></div>
+        <div><span>Material</span><strong>Beton, Sojawachs</strong></div>
+        <div><span>Formate</span><strong>Säntis, Eiger</strong></div>
+        <div><span>Preis</span><strong class="num">ab CHF 14.99</strong></div>
+      </div>
+      <h1 class="headline" aria-label="Wachsfresser.">
+        <span class="row" aria-hidden="true" data-split>Wachs–</span>
+        <span class="row" aria-hidden="true" data-split>fresser<span class="dot">.</span></span>
+      </h1>
+      <div class="hero-body grid">
+        <div class="hero-copy">
+          <span class="label">Wiederbefüllbares Schmelzlicht</span>
+          <p>Ein Gefäss aus handgegossenem Beton. Der Docht bleibt, du legst Wachsreste nach, und das Licht brennt weiter. Geliefert einsatzbereit mit Sojawachs-Startfüllung.</p>
+          <div class="btns">
+            <a class="btn btn-red" href="#kollektion" data-magnetic>Kollektion ansehen <span class="arr">→</span></a>
+            <a class="btn btn-line" href="#prinzip">Prinzip</a>
+          </div>
+        </div>
+        <figure class="hero-fig">
+          <div class="frame"><img class="hero-img" src="../assets/product/hero-outdoor-eiger.jpg" alt="Zwei brennende Eiger-Wachsfresser in Creme und Anthrazit auf einem gedeckten Tisch im Freien"/></div>
+          <figcaption><span>Abb. 1 — Eiger in Creme und Anthrazit</span><span>Aussenbereich</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track" data-marquee>
+      <span>Handgegossen in Salmsach <b>■</b> Sojawachs-Startfüllung <b>■</b> Dauerdocht <b>■</b> Wiederbefüllbar <b>■</b> Versand Schweiz ca. 3 Werktage <b>■</b></span>
+      <span>Handgegossen in Salmsach <b>■</b> Sojawachs-Startfüllung <b>■</b> Dauerdocht <b>■</b> Wiederbefüllbar <b>■</b> Versand Schweiz ca. 3 Werktage <b>■</b></span>
+      <span>Handgegossen in Salmsach <b>■</b> Sojawachs-Startfüllung <b>■</b> Dauerdocht <b>■</b> Wiederbefüllbar <b>■</b> Versand Schweiz ca. 3 Werktage <b>■</b></span>
+      <span>Handgegossen in Salmsach <b>■</b> Sojawachs-Startfüllung <b>■</b> Dauerdocht <b>■</b> Wiederbefüllbar <b>■</b> Versand Schweiz ca. 3 Werktage <b>■</b></span>
+    </div>
+  </div>
+
+  <section class="section" id="kollektion">
+    <div class="wrap">
+      <div class="sec-head grid">
+        <span class="label">Kollektion</span>
+        <h2>Zwei Formate, zwei Farben. Alle Ausführungen auf einen Blick.</h2>
+      </div>
+      <div class="board" role="table" aria-label="Alle Wachsfresser">
+        <div class="board-head label" role="row">
+          <span></span><span>Modell</span><span>Farbe</span><span>Docht</span><span>Hinweis</span><span>Preis</span><span></span>
+        </div>
+        <div id="board-rows"></div>
+      </div>
+    </div>
+    <div class="preview" aria-hidden="true"><img alt=""/></div>
+  </section>
+
+  <section class="section" id="prinzip" style="padding-top: 0">
+    <div class="wrap">
+      <div class="sec-head grid">
+        <span class="label">Prinzip</span>
+        <h2>Vom Guss bis zum nächsten Abend.</h2>
+      </div>
+      <div class="steps grid">
+        <div class="step" data-reveal><span class="n num" aria-hidden="true">1</span><h3>Giessen</h3><p>Jedes Gefäss wird in Salmsach von Hand gegossen und nach dem Aushärten geprüft.</p></div>
+        <div class="step" data-reveal data-delay=".08"><span class="n num" aria-hidden="true">2</span><h3>Docht einsetzen</h3><p>Säntis bekommt einen Glasfaserdocht, Eiger einen Holzfaserdocht für draussen.</p></div>
+        <div class="step" data-reveal data-delay=".16"><span class="n num" aria-hidden="true">3</span><h3>Startwachs füllen</h3><p>Mit Sojawachs vorbereitet, direkt einsatzbereit, wenn das Paket ankommt.</p></div>
+        <div class="step" data-reveal data-delay=".24"><span class="n num" aria-hidden="true">4</span><h3>Nachlegen</h3><p>Geeignete Wachsreste bis etwa 1 cm unter den Docht nachfüllen. Fertig.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="manufaktur" style="padding-top: 0">
+    <div class="wrap">
+      <div class="figs grid">
+        <figure data-reveal>
+          <div class="frame"><img class="par" src="../assets/product/saentis-indoor-scene.jpg" alt="Säntis Wachsfresser in einer ruhigen Wohnszene"/></div>
+          <figcaption><span>Abb. 2 — Säntis, Creme</span><span>Innen</span></figcaption>
+        </figure>
+        <figure data-reveal data-delay=".1">
+          <div class="frame"><img class="par" src="../assets/product/eiger-dinner-scene.jpg" alt="Eiger Wachsfresser bei einem Abendessen im Freien"/></div>
+          <figcaption><span>Abb. 3 — Eiger beim Abendessen</span><span>Aussen</span></figcaption>
+        </figure>
+        <p class="quote" data-reveal>Das Gefäss bleibt. Du legst Wachs nach, und das Licht kommt zurück. <em>Gegossen in Salmsach, Thurgau.</em></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap grid">
+      <h2 data-reveal>Licht, das bleibt.</h2>
+      <div class="cta-side" data-reveal data-delay=".1">
+        <p>Wähle dein Format. Jedes Stück kommt mit Docht und Sojawachs-Startfüllung.</p>
+        <div class="btns">
+          <a class="btn" href="#kollektion" data-magnetic>Säntis · ab CHF 14.99 <span class="arr">→</span></a>
+          <a class="btn btn-line" href="#kollektion">Eiger · ab CHF 59.99</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap grid">
+    <div>Wachsfresser · Salmsach, Schweiz</div>
+    <div>hallo@wachsfresser-schweiz.ch</div>
+    <div>Impressum · Datenschutz · AGB</div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/gsap@3.13.0/dist/gsap.min.js" integrity="sha384-HOvlOYPIs/zjoIkWUGXkVmXsjr8GuZLV+Q+rcPwmJOVZVpvTSXQChiN4t9Euv9Vc" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/gsap@3.13.0/dist/ScrollTrigger.min.js" integrity="sha384-P8VzCVnT9NBUkMrpcIZrJbA7EBjJvh/fJS6PmP+4nLIM284DtsImIv8D0fFjIkeh" crossorigin="anonymous"></script>
+<script src="../motion.js"></script>
+<script src="mockup-kit.js"></script>
+<script>
+(function () {
+  const { PRODUCTS, chf } = MK;
+  const rows = document.getElementById('board-rows');
+  rows.innerHTML = Object.entries(PRODUCTS).map(([id, p]) => `
+    <div class="board-row" role="row" data-product data-img="${p.img}">
+      <img class="thumb" data-fly src="${p.img}" alt="${p.name} in ${p.color}"/>
+      <span class="model">${p.name}</span>
+      <span class="muted">${p.color}</span>
+      <span class="muted">${p.wick}</span>
+      <span class="${p.name === 'Eiger' ? 'warn' : 'muted'}">${p.use}</span>
+      <span class="price num">${chf(p.price)}</span>
+      <button class="add label" type="button" data-add="${id}" data-done="✓ Im Warenkorb">+ Warenkorb</button>
+    </div>`).join('');
+
+  MK.wire();
+  const M = window.WFMotion;
+  if (!M || !M.enabled) return;
+  const { gsap } = M;
+
+  // Headline in Buchstaben zerlegen
+  document.querySelectorAll('[data-split]').forEach(row => {
+    const walk = (node) => [...node.childNodes].forEach(n => {
+      if (n.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        [...n.textContent].forEach(c => { const s = document.createElement('span'); s.className = 'ch'; s.textContent = c; frag.appendChild(s); });
+        n.replaceWith(frag);
+      } else walk(n);
+    });
+    walk(row);
+  });
+
+  gsap.timeline({ defaults: { ease: 'expo.out' } })
+    .from('.lines span', { scaleY: 0, duration: 1.4, stagger: .04 })
+    .from('.headline .ch', { yPercent: 105, duration: 1.1, stagger: .035 }, .1)
+    .from('.hero-meta > div', { y: 16, opacity: 0, duration: .8, stagger: .06 }, .3)
+    .from('.hero-fig .frame', { clipPath: 'inset(0 0 0 100%)', duration: 1.3, ease: 'power4.inOut' }, .4)
+    .from('.hero-img', { scale: 1.25, duration: 1.8 }, .4)
+    .from('.hero-copy > *', { y: 24, opacity: 0, duration: .9, stagger: .08 }, .7);
+
+  gsap.from('.board-row', { y: 30, opacity: 0, duration: .9, stagger: .07, ease: 'expo.out', scrollTrigger: { trigger: '.board', start: 'top 80%' } });
+  gsap.utils.toArray('.par').forEach(img => gsap.fromTo(img, { yPercent: -6, scale: 1.15 }, { yPercent: 6, ease: 'none', scrollTrigger: { trigger: img.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }));
+  MK.reveals();
+
+  // Vorschaubild folgt dem Cursor über der Tabelle
+  if (M.finePointer) {
+    const prev = document.querySelector('.preview');
+    const pimg = prev.querySelector('img');
+    const xTo = gsap.quickTo(prev, 'x', { duration: .5, ease: 'power3' });
+    const yTo = gsap.quickTo(prev, 'y', { duration: .5, ease: 'power3' });
+    gsap.set(prev, { xPercent: -50, yPercent: -50 });
+    document.querySelectorAll('.board-row').forEach(row => {
+      row.addEventListener('pointerenter', () => { pimg.src = row.dataset.img; prev.classList.add('on'); gsap.to(prev, { scale: 1, rotate: -3, duration: .5, ease: 'back.out(2)' }); });
+      row.addEventListener('pointerleave', () => { prev.classList.remove('on'); gsap.to(prev, { scale: .8, rotate: 0, duration: .3 }); });
+      row.addEventListener('pointermove', e => { xTo(e.clientX + 180); yTo(e.clientY); });
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -169,13 +169,16 @@ function create(container, options = {}) {
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 60);
-  const camBase = new THREE.Vector3(0, 1.6, 5.5);
-  const lookAt = new THREE.Vector3(0, 0.26, 0);
+  // Optionen: light = helle Bühne ohne Glutteich, plinth = Sockel, focusX = horizontale Lage auf breiten Screens
+  const LIGHT = !!options.light;
+  const PLINTH = !!options.plinth;
+  const camBase = PLINTH ? new THREE.Vector3(0, 1.45, 6.6) : new THREE.Vector3(0, 1.6, 5.5);
+  const lookAt = PLINTH ? new THREE.Vector3(0, 0.02, 0) : new THREE.Vector3(0, 0.26, 0);
   camera.position.copy(camBase);
 
   /* Licht */
-  scene.add(new THREE.HemisphereLight(0xfff1e0, 0x20160f, 0.55));
-  const key = new THREE.DirectionalLight(0xffe7cf, 1.15);
+  scene.add(new THREE.HemisphereLight(0xfff1e0, LIGHT ? 0x8a8378 : 0x20160f, LIGHT ? 1.1 : 0.55));
+  const key = new THREE.DirectionalLight(0xffe7cf, LIGHT ? 1.6 : 1.15);
   key.position.set(-3, 4, 3.5);
   scene.add(key);
   const rim = new THREE.DirectionalLight(0xffa860, 1.4);
@@ -225,7 +228,18 @@ function create(container, options = {}) {
   );
   pool.rotation.x = -Math.PI / 2;
   pool.position.y = 0.002;
+  pool.visible = !LIGHT;
   scene.add(pool);
+
+  if (PLINTH) {
+    const plinthColor = options.plinthColor || 0xf3f2ee;
+    const plinth = new THREE.Mesh(
+      new THREE.BoxGeometry(1.9, 4, 1.9),
+      new THREE.MeshStandardMaterial({ color: plinthColor, roughness: 0.95, emissive: plinthColor, emissiveIntensity: 0.32 })
+    );
+    plinth.position.y = -2;
+    scene.add(plinth);
+  }
 
   /* Wachsfresser-Gruppe */
   const pivot = new THREE.Group();
@@ -377,6 +391,7 @@ function create(container, options = {}) {
   scene.add(glow);
   const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: 0.22 }));
   halo.renderOrder = 1;
+  if (LIGHT) { halo.visible = false; glow.material.opacity = 0.35; }
   scene.add(halo);
 
   /* Partikel: Glut & Staub */
@@ -436,6 +451,8 @@ function create(container, options = {}) {
       s[i] = 1 + Math.random() * 2.2;
     }
   }
+  dust.visible = !LIGHT;
+  embers.visible = !LIGHT;
   scene.add(dust);
 
   /* Zustand */
@@ -465,7 +482,7 @@ function create(container, options = {}) {
     embers.material.uniforms.uPixelRatio.value = dust.material.uniforms.uPixelRatio.value = renderer.getPixelRatio();
     camera.aspect = w / h;
     const wide = w > 880;
-    state.focusX = wide ? 0.68 : 0.5;
+    state.focusX = wide ? (typeof options.focusX === 'number' ? options.focusX : 0.68) : 0.5;
     if (state.focusX > 0.5) {
       const fullW = 2 * state.focusX * w;
       camera.setViewOffset(fullW, h, 0, 0, w, h);
@@ -576,7 +593,7 @@ function create(container, options = {}) {
     wax.emissiveIntensity = 0.1 + 0.08 * flick * ig;
     pool.material.opacity = 0.75 + flick * 0.25 * ig;
     pool.scale.setScalar(0.8 + 0.2 * ig);
-    shadow.scale.setScalar(Math.max(0.0001, s) * vessel.userData.cfg.scale);
+    shadow.scale.setScalar(Math.max(0.0001, s) * vessel.userData.cfg.scale * (PLINTH ? 0.6 : 1));
     shadow.position.x = pool.position.x = pivot.position.x;
 
     // Glut

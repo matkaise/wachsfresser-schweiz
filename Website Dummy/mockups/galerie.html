@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Wachsfresser · Galerie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&display=swap"/>
+<style>
+/* Layout: Ausstellungsraum – weisse Wand, das Objekt auf dem Sockel, Werkangaben als kleine Wandschilder, viel Luft */
+:root {
+  --wall: #f1f0ec;
+  --wall-2: #e6e4de;
+  --plaque: #fbfbf9;
+  --ink: #171716;
+  --label: #6b6964;
+  --brass: #a8813f;
+  --font: 'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --gut: clamp(16px, 3.4vw, 48px);
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  color-scheme: light;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--wall); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:focus-visible { outline: 1.5px solid var(--ink); outline-offset: 4px; }
+.wrap { max-width: 1440px; margin: 0 auto; padding-inline: var(--gut); }
+.small { font-size: 12px; letter-spacing: .06em; color: var(--label); }
+.num { font-variant-numeric: tabular-nums; }
+
+/* Navigation */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: color-mix(in srgb, var(--wall) 88%, transparent); backdrop-filter: blur(10px); }
+.nav .wrap { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 72px; gap: 16px; }
+.brand { font-weight: 500; font-size: 17px; letter-spacing: -.01em; }
+.nav-links { display: flex; gap: 36px; list-style: none; font-size: 14px; color: var(--label); }
+.nav-links a:hover { color: var(--ink); }
+.cart-btn { justify-self: end; position: relative; display: inline-flex; gap: 6px; font-size: 14px; padding-block: 6px; border-bottom: 1px solid var(--ink); }
+.cart-count { font-weight: 600; }
+.cart-btn.is-bumped .cart-count { color: var(--brass); }
+
+/* Raum 1 */
+.room1 { padding-block: clamp(8px, 2vw, 24px) clamp(56px, 8vw, 112px); }
+.room-tag { display: flex; justify-content: space-between; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--wall-2); }
+.expo { display: grid; grid-template-columns: 1.35fr 1fr; gap: var(--gut); align-items: center; margin-top: clamp(16px, 2vw, 32px); }
+.stage { position: relative; height: clamp(440px, 70vh, 720px); }
+.stage canvas { display: block; width: 100% !important; height: 100% !important; opacity: 0; transition: opacity 1.2s ease; -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 100%); mask-image: linear-gradient(180deg, #000 72%, transparent 100%); }
+.stage.is-ready canvas { opacity: 1; }
+.stage .poster { position: absolute; left: 18%; top: 10%; width: 64%; height: 80%; object-fit: contain; transition: opacity .8s; mix-blend-mode: multiply; }
+.stage.is-ready .poster { opacity: 0; }
+.hall-title { font-weight: 300; font-size: clamp(44px, 6.4vw, 104px); line-height: .95; letter-spacing: -.045em; text-wrap: balance; margin-bottom: clamp(28px, 4vw, 56px); }
+.hall-title span { color: var(--label); }
+.plaque { background: var(--plaque); padding: 26px 28px; box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 18px 40px -24px rgba(0,0,0,.25); max-width: 380px; display: grid; gap: 14px; }
+.plaque .obj { display: flex; justify-content: space-between; align-items: center; }
+.plaque h2 { font-weight: 500; font-size: 26px; letter-spacing: -.02em; line-height: 1.1; }
+.plaque h2 em { font-style: normal; font-weight: 300; color: var(--label); }
+.plaque dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; font-size: 14px; }
+.plaque dt { color: var(--label); }
+.plaque .row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 14px; border-top: 1px solid var(--wall-2); }
+.plaque .price { font-size: 20px; font-weight: 500; }
+.arrows { display: flex; gap: 6px; }
+.arrows button { width: 36px; height: 36px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--wall-2); transition: box-shadow .3s, background .3s; }
+.arrows button:hover { background: var(--ink); color: var(--plaque); }
+.dots { display: flex; gap: 10px; }
+.dots button { width: 22px; height: 22px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); position: relative; }
+.dots button[aria-pressed="true"]::after { content: ''; position: absolute; inset: -5px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--ink); }
+.buy { display: inline-flex; align-items: center; gap: 10px; padding: 13px 20px; background: var(--ink); color: var(--plaque); font-size: 14px; font-weight: 500; transition: background .3s; }
+.buy:hover { background: var(--brass); }
+.note { font-size: 13px; color: var(--brass); }
+
+/* Raum 2: Sammlung mit Spotlight */
+.room2 { position: relative; padding-block: clamp(64px, 9vw, 128px); background: var(--wall-2); overflow: hidden; }
+.room2::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 40%), rgba(255, 252, 244, .75), transparent 60%); transition: opacity .6s; }
+.room2 > .wrap { position: relative; }
+.sec-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: clamp(36px, 5vw, 72px); }
+.sec-head h2 { font-weight: 300; font-size: clamp(36px, 4.6vw, 68px); line-height: 1; letter-spacing: -.04em; }
+.works { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(20px, 3vw, 48px); align-items: start; }
+.work:nth-child(2) { margin-top: 64px; }
+.work:nth-child(3) { margin-top: 24px; }
+.work:nth-child(4) { margin-top: 88px; }
+.frame { background: var(--plaque); padding: 14%; box-shadow: 0 2px 0 rgba(0,0,0,.05), 0 30px 50px -30px rgba(0,0,0,.35); border: 8px solid #d9d4ca; }
+.frame img { aspect-ratio: 4 / 5; object-fit: cover; width: 100%; }
+.work .cap { margin-top: 18px; display: grid; gap: 2px; font-size: 14px; }
+.work .cap b { font-weight: 500; font-size: 16px; }
+.work .cap .line { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; margin-top: 8px; }
+.add { font-size: 13px; border-bottom: 1px solid currentColor; padding-bottom: 2px; transition: color .3s; }
+.add:hover { color: var(--brass); }
+
+/* Raum 3: Entstehung */
+.room3 { padding-block: clamp(64px, 9vw, 128px); }
+.making { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: start; }
+.making .pic { overflow: hidden; aspect-ratio: 4 / 5; }
+.making .pic img { width: 100%; height: 100%; object-fit: cover; }
+.steps { list-style: none; display: grid; gap: 0; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding-block: 26px; border-top: 1px solid var(--wall-2); }
+.steps li::before { content: counter(s, decimal-leading-zero); font-size: 13px; color: var(--label); padding-top: 6px; font-variant-numeric: tabular-nums; }
+.steps h3 { font-weight: 400; font-size: 26px; letter-spacing: -.02em; line-height: 1.2; }
+.steps p { color: var(--label); max-width: 44ch; margin-top: 6px; }
+
+/* Info wie am Museumseingang */
+.info { border-top: 1px solid var(--ink); padding-block: clamp(48px, 6vw, 80px); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; gap: var(--gut); align-items: end; }
+.info div { display: grid; gap: 4px; }
+.info b { font-weight: 500; font-size: 20px; }
+.foot { padding-block: 28px 40px; }
+.foot .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+.fly-ghost { position: fixed; z-index: 400; background-size: cover; background-position: center; box-shadow: 0 20px 40px -10px rgba(0,0,0,.3); pointer-events: none; }
+.mk-toast { position: fixed; right: 24px; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); background: var(--plaque); color: var(--ink); padding: 14px 18px; font-size: 14px; box-shadow: 0 18px 40px -16px rgba(0,0,0,.35); z-index: 60; transform: translateY(160%); transition: transform .5s var(--ease); max-width: calc(100vw - 32px); }
+.mk-toast.show { transform: translateY(0); }
+
+@media (max-width: 980px) {
+  .nav-links { display: none; }
+  .nav .wrap { grid-template-columns: 1fr auto; }
+  .expo, .making { grid-template-columns: 1fr; }
+  .stage { height: clamp(360px, 56vh, 520px); }
+  .plaque { max-width: none; }
+  .works { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .work:nth-child(n) { margin-top: 0; }
+  .work:nth-child(even) { margin-top: 40px; }
+  .info { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) { .info { grid-template-columns: 1fr; } }
+</style>
+<script type="importmap">
+  {
+    "imports": { "three": "https://unpkg.com/three@0.170.0/build/three.module.min.js" },
+    "integrity": { "https://unpkg.com/three@0.170.0/build/three.module.min.js": "sha384-IDC7sAMAIMB/TZ6dgKKPPAKZ2bXXXP8+FBMBC8cU319eBhKITx+PaalhfDkDNH28" }
+  }
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">Wachsfresser</a>
+    <ul class="nav-links">
+      <li><a href="#raum1">Ausstellung</a></li>
+      <li><a href="#sammlung">Sammlung</a></li>
+      <li><a href="#entstehung">Entstehung</a></li>
+    </ul>
+    <button class="cart-btn" type="button" aria-label="Warenkorb">Warenkorb (<span class="cart-count num">0</span>)</button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="room1" id="raum1">
+    <div class="wrap">
+      <div class="room-tag small"><span>Raum 1 · Das Objekt</span><span>Salmsach, Thurgau</span></div>
+      <div class="expo" data-product>
+        <div class="stage" id="stage">
+          <img class="poster" data-fly src="../assets/product/saentis-creme.jpg" alt=""/>
+        </div>
+        <div>
+          <h1 class="hall-title">Licht als Objekt. <span>Wachsfresser aus Beton.</span></h1>
+          <aside class="plaque" aria-live="polite">
+            <div class="obj small">
+              <span>Objekt <b class="num" id="obj-n">1</b> von 4</span>
+              <div class="arrows">
+                <button type="button" id="prev" aria-label="Vorheriges Objekt">←</button>
+                <button type="button" id="next" aria-label="Nächstes Objekt">→</button>
+              </div>
+            </div>
+            <div class="swap">
+              <h2 id="p-name">Säntis <em>Creme</em></h2>
+              <dl style="margin-top: 12px">
+                <dt>Werk</dt><dd id="p-kind">Wachsfresser, kompakt</dd>
+                <dt>Material</dt><dd id="p-mat">Beton, Sojawachs, Glasfaserdocht</dd>
+                <dt>Herkunft</dt><dd>Handgegossen in Salmsach TG</dd>
+              </dl>
+              <p class="note" id="p-note" style="margin-top: 10px" hidden>Nur für den Aussenbereich</p>
+            </div>
+            <div class="row">
+              <div class="dots" role="group" aria-label="Farbe">
+                <button type="button" style="background:#e8e1d2" aria-label="Creme" aria-pressed="true" data-color="creme"></button>
+                <button type="button" style="background:#5c5a56" aria-label="Anthrazit" aria-pressed="false" data-color="anthrazit"></button>
+              </div>
+              <span class="price num" id="p-price">CHF 14.99</span>
+            </div>
+            <button class="buy" type="button" id="buy" data-add="saentis-creme" data-done="✓ Erworben" data-magnetic>Erwerben</button>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="room2" id="sammlung">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Die Sammlung</h2>
+        <span class="small">Raum 2 · Vier Ausführungen</span>
+      </div>
+      <div class="works" id="works"></div>
+    </div>
+  </section>
+
+  <section class="room3" id="entstehung">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Entstehung</h2>
+        <span class="small">Raum 3 · Vom Guss zum Licht</span>
+      </div>
+      <div class="making">
+        <div class="pic" data-reveal><img class="par" src="../assets/product/eiger-dinner-scene.jpg" alt="Zwei Eiger-Wachsfresser brennen bei einem Abendessen im Freien"/></div>
+        <ol class="steps">
+          <li data-reveal><div><h3>Giessen</h3><p>Jedes Gefäss wird in Salmsach von Hand gegossen und nach dem Aushärten geprüft. Farbnuancen gehören zum Material.</p></div></li>
+          <li data-reveal data-delay=".08"><div><h3>Docht einsetzen</h3><p>Säntis erhält einen Glasfaserdocht, Eiger einen Holzfaserdocht für den Aussenbereich.</p></div></li>
+          <li data-reveal data-delay=".16"><div><h3>Mit Sojawachs füllen</h3><p>Die Startfüllung macht jedes Stück direkt einsatzbereit.</p></div></li>
+          <li data-reveal data-delay=".24"><div><h3>Wachs nachlegen</h3><p>Geeignete Wachsreste bis etwa 1 cm unter den Docht nachfüllen. Das Objekt bleibt, das Licht kommt zurück.</p></div></li>
+        </ol>
+      </div>
+      <div class="info" style="margin-top: clamp(64px, 8vw, 112px)">
+        <div><span class="small">Versand</span><b>Schweiz ca. 3 Werktage</b></div>
+        <div><span class="small">Material</span><b>Beton, Sojawachs</b></div>
+        <div><span class="small">Atelier</span><b>Salmsach TG</b></div>
+        <a class="buy" href="#raum1" data-magnetic>Objekt wählen →</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot small">
+  <div class="wrap"><span>Wachsfresser · Salmsach, Schweiz</span><span>hallo@wachsfresser-schweiz.ch</span><span>Impressum · Datenschutz · AGB</span></div>
+</footer>
+
+<script src="https://unpkg.com/gsap@3.13.0/dist/gsap.min.js" integrity="sha384-HOvlOYPIs/zjoIkWUGXkVmXsjr8GuZLV+Q+rcPwmJOVZVpvTSXQChiN4t9Euv9Vc" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/gsap@3.13.0/dist/ScrollTrigger.min.js" integrity="sha384-P8VzCVnT9NBUkMrpcIZrJbA7EBjJvh/fJS6PmP+4nLIM284DtsImIv8D0fFjIkeh" crossorigin="anonymous"></script>
+<script src="../motion.js"></script>
+<script src="mockup-kit.js"></script>
+<script type="module" src="../hero-scene.js"></script>
+<script>
+(function () {
+  const { PRODUCTS, chf } = MK;
+  const ids = Object.keys(PRODUCTS);
+  let index = 0;
+  let ctrl = null;
+  const M = window.WFMotion;
+  const anim = M && M.enabled;
+
+  // Sammlung an der Wand
+  document.getElementById('works').innerHTML = ids.map(id => {
+    const p = PRODUCTS[id];
+    return `<figure class="work" data-product data-reveal>
+      <div class="frame" data-tilt="5"><img data-fly src="${p.img}" alt="${p.name} in ${p.color}"/></div>
+      <figcaption class="cap"><b>${p.name}</b><span>${p.color} · ${p.wick}</span>
+        <span class="line"><span class="num">${chf(p.price)}</span><button class="add" type="button" data-add="${id}" data-done="✓ Erworben">Erwerben</button></span>
+      </figcaption></figure>`;
+  }).join('');
+
+  // Wandschild aktualisieren
+  function show(i, colorOnly) {
+    index = (i + ids.length) % ids.length;
+    const id = ids[index];
+    const p = PRODUCTS[id];
+    const fill = () => {
+      document.getElementById('obj-n').textContent = index + 1;
+      document.getElementById('p-name').innerHTML = `${p.name} <em>${p.color}</em>`;
+      document.getElementById('p-kind').textContent = p.name === 'Eiger' ? 'Wachsfresser, massiv, mit Holzdeckel' : 'Wachsfresser, kompakt';
+      document.getElementById('p-mat').textContent = `Beton, Sojawachs, ${p.wick}`;
+      document.getElementById('p-note').hidden = p.name !== 'Eiger';
+      document.getElementById('p-price').textContent = chf(p.price);
+      document.getElementById('buy').dataset.add = id;
+      document.querySelector('.stage .poster').src = p.img;
+      document.querySelectorAll('.dots button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.color === id.split('-')[1])));
+    };
+    if (anim && !colorOnly) {
+      M.gsap.to('.plaque .swap', { opacity: 0, y: -8, duration: .25, onComplete: () => { fill(); M.gsap.fromTo('.plaque .swap', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .6, ease: 'expo.out' }); } });
+    } else fill();
+    if (ctrl) ctrl.setVariant({ model: id.split('-')[0], color: id.split('-')[1] });
+  }
+  document.getElementById('prev').addEventListener('click', () => show(index - 1));
+  document.getElementById('next').addEventListener('click', () => show(index + 1));
+  document.querySelectorAll('.dots button').forEach(b => b.addEventListener('click', () => {
+    const model = ids[index].split('-')[0];
+    show(ids.indexOf(`${model}-${b.dataset.color}`), true);
+  }));
+
+  // 3D-Objekt auf dem Sockel
+  const stage = document.getElementById('stage');
+  const init = () => {
+    if (ctrl || !window.WFHeroScene) return;
+    ctrl = window.WFHeroScene.create(stage, { model: 'saentis', color: 'creme', light: true, plinth: true, focusX: .5 });
+    if (ctrl) ctrl.intro();
+  };
+  if (window.WFHeroScene) init(); else window.addEventListener('wf:scene-ready', init, { once: true });
+
+  MK.wire();
+  if (!anim) return;
+  const { gsap } = M;
+
+  gsap.timeline({ defaults: { ease: 'expo.out' } })
+    .from('.room-tag', { opacity: 0, duration: 1 })
+    .from('.hall-title', { y: 40, opacity: 0, duration: 1.4 }, .1)
+    .from('.plaque', { y: 40, opacity: 0, duration: 1.2 }, .35);
+
+  // Spotlight folgt der Maus über die Sammlung
+  const room = document.querySelector('.room2');
+  if (M.finePointer) {
+    const pos = { x: 50, y: 40 };
+    const set = () => { room.style.setProperty('--mx', pos.x + '%'); room.style.setProperty('--my', pos.y + '%'); };
+    room.addEventListener('pointermove', e => {
+      const r = room.getBoundingClientRect();
+      gsap.to(pos, { x: (e.clientX - r.left) / r.width * 100, y: (e.clientY - r.top) / r.height * 100, duration: .8, ease: 'power3.out', onUpdate: set, overwrite: true });
+    });
+  }
+  gsap.utils.toArray('.par').forEach(img => gsap.fromTo(img, { yPercent: -6, scale: 1.15 }, { yPercent: 6, ease: 'none', scrollTrigger: { trigger: img.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }));
+  MK.reveals();
+  M.ScrollTrigger.create({ trigger: '#raum1', start: 'top top', end: 'bottom top', onUpdate: s => ctrl && ctrl.setScroll(s.progress * .6) });
+})();
+</script>
+</body>
+</html>
