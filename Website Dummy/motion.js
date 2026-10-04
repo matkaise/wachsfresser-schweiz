@@ -177,12 +177,26 @@
     });
   }
 
+  /* Elemente mit data-reveal blenden beim Scrollen ein (data-delay optional) */
+  function reveal(root = document) {
+    if (!enabled || !ScrollTrigger) return noop;
+    const tweens = [...root.querySelectorAll('[data-reveal]')].map(el => gsap.from(el, {
+      y: Number(el.dataset.reveal) || 40,
+      opacity: 0,
+      duration: 1.1,
+      ease: 'expo.out',
+      delay: Number(el.dataset.delay) || 0,
+      scrollTrigger: { trigger: el, start: 'top 88%' },
+    }));
+    return () => tweens.forEach(t => { if (t.scrollTrigger) t.scrollTrigger.kill(); t.revert(); });
+  }
+
   function refresh() {
     if (ScrollTrigger) ScrollTrigger.refresh();
   }
 
   window.WFMotion = {
     gsap, ScrollTrigger, enabled, reduce, finePointer,
-    flyToCart, bumpCart, magnetic, tilt, marquee, progressBar, scope, animateNumber, refresh,
+    flyToCart, bumpCart, magnetic, tilt, marquee, progressBar, scope, animateNumber, reveal, refresh,
   };
 })();
