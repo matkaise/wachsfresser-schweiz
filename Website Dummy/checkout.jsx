@@ -5,14 +5,14 @@ const SHIPPING = [
   {
     id: 'ch',
     name: 'Versand Schweiz',
-    desc: 'Lieferadresse in der Schweiz · Preis wird serverseitig gesetzt',
+    desc: 'Lieferadresse in der Schweiz · Kosten siehst du im nächsten Schritt',
     price: 0,
     priceLabel: 'Im Checkout',
   },
   {
     id: 'eu',
     name: 'Versand Europa',
-    desc: 'Deutschland, Österreich, Frankreich oder Italien · Preis wird serverseitig gesetzt',
+    desc: 'Deutschland, Österreich, Frankreich oder Italien · Kosten siehst du im nächsten Schritt',
     price: 0,
     priceLabel: 'Im Checkout',
   },
@@ -21,18 +21,18 @@ const SHIPPING = [
 const PAYMENT_METHODS = [
   {
     id: 'auto',
-    label: 'Stripe Auswahl',
-    desc: 'Stripe zeigt passende Zahlungsarten wie Karte, Wallets oder TWINT, sofern im Dashboard aktiviert.',
+    label: 'Auf der Bezahlseite wählen',
+    desc: 'Du wählst die Zahlungsart erst auf der Bezahlseite von Stripe.',
   },
   {
     id: 'card',
     label: 'Karte',
-    desc: 'Kredit- oder Debitkarte sicher auf der Stripe-Seite bezahlen.',
+    desc: 'Kredit- oder Debitkarte, bezahlt über die gesicherte Seite von Stripe.',
   },
   {
     id: 'twint',
     label: 'TWINT',
-    desc: 'TWINT ist für Schweizer CHF-Zahlungen vorgesehen und muss im Stripe-Dashboard aktiv sein.',
+    desc: 'Bezahlen mit der TWINT-App, nur in CHF.',
   },
 ];
 
@@ -150,9 +150,9 @@ function Checkout({ open, onClose, items }) {
           <div className="checkout-form">
             {step === 0 && (
               <>
-                <h2>Kontakt für deine Bestellung.</h2>
+                <h2>Deine Kontaktdaten</h2>
                 <p className="lead">
-                  Deine Zahlungs- und Lieferdaten werden anschliessend sicher im Stripe Checkout erfasst.
+                  Adresse und Zahlung gibst du danach auf der Bezahlseite von Stripe ein.
                 </p>
                 <div className="field-grid">
                   <div className="field full">
@@ -178,9 +178,9 @@ function Checkout({ open, onClose, items }) {
 
             {step === 1 && (
               <>
-                <h2>Wohin reist dein Wachsfresser?</h2>
+                <h2>Wohin sollen wir liefern?</h2>
                 <p className="lead">
-                  Stripe sammelt die konkrete Lieferadresse. Hier wählst du nur die Versandregion.
+                  Hier wählst du nur das Land. Die genaue Adresse gibst du auf der Bezahlseite ein.
                 </p>
                 <div className="shipping-options">
                   {SHIPPING.map(s => (
@@ -206,9 +206,9 @@ function Checkout({ open, onClose, items }) {
 
             {step === 2 && (
               <>
-                <h2>Sicher bezahlen.</h2>
+                <h2>Zahlung</h2>
                 <p className="lead">
-                  Du wirst zu Stripe weitergeleitet. Kartendaten oder TWINT-Freigaben werden nicht auf dieser Website gespeichert.
+                  Bezahlt wird auf der Seite von Stripe. Karten- und TWINT-Daten speichern wir nicht.
                 </p>
                 <div className="payment-options">
                   {PAYMENT_METHODS.map(p => (

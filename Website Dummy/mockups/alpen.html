@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Wachsfresser · Alpenplakat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap"/>
+<link rel="stylesheet" href="alpen.css"/>
+<style>
+/* Layout: Reiseplakat der 1930er – der Wachsfresser steht als Hauptmotiv auf dem Gipfelplateau, seine Flamme ist die Sonne */
+
+/* Plakat-Hero */
+.poster { position: relative; margin: 0 var(--gut); border-radius: 6px; overflow: hidden; background: linear-gradient(180deg, #f2c995 0%, var(--dawn) 34%, #f8eadb 60%, #f3e3cf 100%); }
+.poster-frame { position: absolute; inset: 14px; border: 2px solid rgba(28, 40, 55, .5); border-radius: 3px; pointer-events: none; z-index: 5; }
+.poster-top { position: relative; z-index: 4; display: flex; justify-content: space-between; gap: 16px; padding: 34px 40px 0; }
+.poster-title { position: relative; z-index: 4; text-align: center; padding: clamp(20px, 3.4vw, 44px) 24px 0; }
+.eyebrow { display: inline-block; color: var(--ink); padding: 6px 14px; border: 1.5px solid rgba(28, 40, 55, .55); border-radius: 999px; }
+.poster-title h1 { margin-top: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; font-size: clamp(44px, 9.4vw, 152px); line-height: .9; color: var(--ink); white-space: nowrap; }
+.poster-title h1 .ch { display: inline-block; }
+.poster-title p { margin-top: 16px; font-size: clamp(16px, 1.7vw, 21px); }
+.poster-title p em { font-family: var(--serif); font-size: 1.15em; color: var(--sun); }
+.range { position: relative; z-index: 1; aspect-ratio: 1440 / 600; margin-top: clamp(-130px, -8vw, -40px); }
+.range > svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.peak-label { font-family: var(--sans); font-size: 13px; letter-spacing: .2em; text-transform: uppercase; fill: var(--ink); font-weight: 600; }
+.peak-alt { font-family: var(--sans); font-size: 12px; letter-spacing: .1em; fill: var(--ink); }
+.hero-stubs { opacity: 0; }
+
+/* Kaufleiste, hängt am Plakat */
+.hero-buy { position: relative; z-index: 6; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 18px; width: fit-content; max-width: calc(100% - 2 * var(--gut)); margin: -38px auto 0; padding: 10px 10px 10px 12px; border-radius: 999px; background: var(--ink); color: var(--snow); box-shadow: 0 24px 50px -20px rgba(28, 40, 55, .6); }
+.hb-thumb { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; background: var(--snow); }
+.hb-info { display: grid; line-height: 1.25; min-width: 132px; }
+.hb-info b { font-weight: 600; }
+.hb-info span { color: var(--sign); font-weight: 500; }
+.seg { position: relative; display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border-radius: 999px; background: rgba(251, 247, 239, .1); }
+.seg-thumb { position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: 999px; background: var(--snow); transform: translateX(calc(var(--i, 0) * 100%)); transition: transform .55s var(--ease); }
+.seg button { position: relative; padding: 8px 16px; border-radius: 999px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; font-size: 12px; transition: color .4s; }
+.seg button[aria-pressed="true"] { color: var(--ink); }
+.dots { display: flex; gap: 10px; }
+.dots button { width: 26px; height: 26px; border-radius: 50%; position: relative; box-shadow: inset 0 0 0 1px rgba(255,255,255,.3); }
+.dots button[aria-pressed="true"]::after { content: ''; position: absolute; inset: -5px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--sign); }
+
+
+/* So funktioniert's: gepinnte Szene */
+.explain { background: var(--snow); color: var(--ink); }
+.ex-pin { min-height: calc(100vh - 64px); display: flex; align-items: center; padding-block: 40px; }
+.ex-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: clamp(24px, 5vw, 80px); align-items: center; width: 100%; }
+.ex-steps { list-style: none; margin-top: clamp(24px, 3vw, 40px); display: grid; gap: 4px; position: relative; }
+.ex-steps::before { content: ''; position: absolute; left: 17px; top: 18px; bottom: 18px; border-left: 2px dashed currentColor; opacity: .25; }
+.ex-step { position: relative; display: grid; grid-template-columns: 36px 1fr; gap: 16px; padding-block: 12px; opacity: .3; }
+.ex-num { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: var(--snow); color: var(--ink); box-shadow: inset 0 0 0 2px currentColor; font-weight: 700; font-size: 14px; }
+.ex-step b { display: block; font-size: 21px; font-weight: 600; letter-spacing: .02em; }
+.ex-step p { max-width: 38ch; font-size: 16px; }
+.ex-art svg { width: 100%; height: auto; overflow: visible; display: block; }
+.ex-stubs { opacity: 0; }
+.explain .v-halo, .night .v-halo { mix-blend-mode: screen; }
+.motion-on .ex-stubs { opacity: 1; }
+html:not(.motion-on) .ex-step { opacity: 1; }
+
+/* Echte Bilder als Postkarten */
+.cards-real { padding-block: clamp(88px, 10vw, 140px) clamp(40px, 6vw, 80px); overflow: hidden; }
+.real-head { display: block; }
+.postcards { display: grid; grid-template-columns: 1.15fr .9fr 1fr; gap: clamp(20px, 3vw, 44px); align-items: start; margin-top: clamp(32px, 4vw, 56px); }
+.postcard { position: relative; display: grid; gap: 12px; padding: 12px 12px 16px; background: #fff; border-radius: 3px; box-shadow: 0 2px 0 rgba(28,40,55,.06), 0 24px 50px -24px rgba(28,40,55,.45); transition: rotate .6s var(--ease), translate .6s var(--ease), box-shadow .6s var(--ease); }
+.postcard:nth-child(1) { rotate: -2.5deg; }
+.postcard:nth-child(2) { rotate: 2deg; margin-top: 48px; }
+.postcard:nth-child(3) { rotate: -1.2deg; margin-top: 16px; }
+.postcard:hover { rotate: 0deg; translate: 0 -8px; box-shadow: 0 2px 0 rgba(28,40,55,.06), 0 36px 60px -24px rgba(28,40,55,.55); }
+.postcard img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 2px; }
+.postcard:nth-child(1) img { aspect-ratio: 1 / 1; }
+.pc-cap { font-family: var(--serif); font-style: italic; font-size: 19px; line-height: 1.25; padding-inline: 4px; }
+.stamp { position: absolute; top: 22px; right: 22px; width: 64px; display: grid; justify-items: center; rotate: 8deg; filter: drop-shadow(0 2px 3px rgba(0,0,0,.2)); }
+.stamp svg { width: 64px; height: auto; display: block; }
+.stamp b { margin-top: 2px; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.6); }
+
+/* Kollektion als zwei Plakate */
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gut); margin-top: clamp(32px, 4vw, 56px); }
+.card { position: relative; border-radius: 6px; overflow: hidden; padding: clamp(24px, 3vw, 40px); display: grid; gap: 22px; }
+.card.saentis { background: #f1d3a6; }
+.card.eiger { background: #c7d6e4; }
+.card-head { display: flex; justify-content: space-between; align-items: start; gap: 16px; }
+.card h3 { font-weight: 700; text-transform: uppercase; letter-spacing: .16em; font-size: clamp(34px, 3.8vw, 56px); line-height: 1; }
+.card h3 small { display: block; margin-top: 8px; font-size: 12px; letter-spacing: .22em; font-weight: 500; }
+.alt { text-align: right; }
+.alt b { display: block; font-size: 26px; font-weight: 600; }
+.arch { position: relative; aspect-ratio: 4 / 4.4; border-radius: 999px 999px 6px 6px; overflow: hidden; background: var(--snow); }
+.arch img { width: 100%; height: 100%; object-fit: cover; }
+.ridge { position: absolute; left: 0; right: 0; bottom: 0; height: 22%; pointer-events: none; }
+.card-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.swatches { display: flex; gap: 8px; }
+.swatch { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px 8px 8px; border-radius: 999px; box-shadow: inset 0 0 0 1.5px rgba(28,40,55,.3); font-size: 14px; font-weight: 500; transition: box-shadow .3s, background .3s; }
+.swatch i { width: 20px; height: 20px; border-radius: 50%; display: inline-block; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+.swatch[aria-pressed="true"] { background: var(--snow); box-shadow: inset 0 0 0 2px var(--ink); }
+.price { font-size: 28px; font-weight: 600; }
+.note { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
+.note::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--sun); }
+
+/* Entstehung als Wanderweg */
+.trail { background: var(--near); color: var(--snow); overflow: hidden; }
+.trail .sec-h { color: var(--snow); }
+.signs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gut); margin-top: clamp(40px, 5vw, 64px); }
+.sign-wrap { display: grid; gap: 16px; align-content: start; }
+.post { position: relative; padding-left: 14px; }
+.post::before { content: ''; position: absolute; left: 0; top: -12px; bottom: -40px; width: 6px; background: #8b97a3; border-radius: 3px; }
+.sign { position: relative; background: var(--sign); color: #111; padding: 12px 34px 12px 16px; clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 50%, calc(100% - 22px) 100%, 0 100%); transform-origin: left center; }
+.sign b { display: block; font-weight: 700; font-size: 20px; letter-spacing: .02em; }
+.sign span { font-size: 13px; font-weight: 500; }
+.sign-wrap p { color: color-mix(in srgb, var(--snow) 82%, transparent); padding-left: 14px; margin-top: 28px; max-width: 32ch; }
+
+/* Geschichte */
+.story { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(32px, 6vw, 96px); align-items: center; }
+.story .arch { aspect-ratio: 4 / 5; }
+.story blockquote { font-family: var(--serif); font-style: italic; font-size: clamp(28px, 3.4vw, 46px); line-height: 1.15; }
+.story cite { display: block; margin-top: 20px; font-style: normal; }
+
+/* Nachtplakat */
+.night { position: relative; margin: 0 var(--gut) var(--gut); border-radius: 6px; overflow: hidden; background: linear-gradient(180deg, #13202f 0%, #23395a 70%, #30506f 100%); color: var(--snow); padding: clamp(48px, 7vw, 96px) clamp(24px, 5vw, 72px); text-align: center; }
+.stars { position: absolute; inset: 0; pointer-events: none; }
+.stars i { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; opacity: .7; }
+.night-art { position: relative; width: min(200px, 44vw); margin: 0 auto 20px; }
+.night-art svg { width: 100%; height: auto; overflow: visible; display: block; }
+.night h2 { position: relative; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; font-size: clamp(40px, 7vw, 104px); line-height: .95; }
+.night h2 em { font-family: var(--serif); font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--sign); }
+.night p { position: relative; margin: 20px auto 28px; max-width: 46ch; color: color-mix(in srgb, var(--snow) 80%, transparent); }
+.night .btns { position: relative; justify-content: center; }
+.night .btn-ghost { box-shadow: inset 0 0 0 2px var(--snow); }
+.night .btn-ghost:hover { background: var(--snow); color: var(--ink); }
+
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .cards, .story { grid-template-columns: 1fr; }
+  .postcards { grid-template-columns: 1fr 1fr; }
+  .postcard:nth-child(1) { grid-column: 1 / -1; }
+  .postcard:nth-child(2) { margin-top: 0; }
+  .signs { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 56px; }
+  .poster-top { padding: 30px 28px 0; font-size: 10px; }
+  .range { aspect-ratio: auto; height: 400px; margin-top: -10px; }
+  .hero-buy { border-radius: 20px; justify-content: space-between; }
+  .ex-grid { grid-template-columns: 1fr; gap: 8px; }
+  .ex-art { order: -1; max-width: 360px; margin: 0 auto; width: 100%; }
+  .ex-step { padding-block: 6px; }
+  .ex-step p { font-size: 14px; }
+  .ex-step b { font-size: 17px; }
+  .ex-pin .sec-h { font-size: 24px; }
+  .ex-steps { margin-top: 12px; }
+}
+@media (max-width: 520px) {
+  .signs { grid-template-columns: 1fr; }
+  .poster-top span:last-child { display: none; }
+  .poster-title { padding-inline: 16px; }
+  .poster-title h1 { letter-spacing: .03em; font-size: 8.6vw; }
+  .eyebrow { letter-spacing: .1em; font-size: 10px; }
+  .hero-buy { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 12px; padding: 12px; width: auto; margin-inline: var(--gut); }
+  .hb-thumb { width: 48px; height: 48px; }
+  .hb-info { min-width: 0; }
+  .hero-buy .seg { grid-column: 1 / -1; }
+  .hero-buy .dots { grid-column: 3; grid-row: 1; }
+  .hero-buy .btn { grid-column: 1 / -1; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">Wachsfresser</a>
+    <ul class="nav-links caps">
+      <li><a href="#prinzip">So funktioniert’s</a></li>
+      <li><a href="alpen-shop.html">Shop</a></li>
+      <li><a href="#entstehung">Entstehung</a></li>
+    </ul>
+    <button class="cart-btn caps" type="button" aria-label="Warenkorb">Korb <span class="cart-count num">0</span></button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="poster" aria-labelledby="hero-title">
+    <div class="poster-frame" aria-hidden="true"></div>
+    <div class="poster-top caps"><span>Schweiz</span><span>Handgegossen in Salmsach, Thurgau</span></div>
+    <div class="poster-title">
+      <span class="eyebrow caps">Wiederbefüllbares Schmelzlicht aus Beton</span>
+      <h1 id="hero-title" data-split>Wachsfresser</h1>
+      <p>Wachsreste rein, <em>Licht raus.</em> Säntis &amp; Eiger, handgegossen in der Schweiz.</p>
+    </div>
+    <div class="range">
+      <svg viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice" role="img" aria-label="Ein Wachsfresser aus Beton mit brennender Flamme steht auf einem Plateau vor den Bergen Säntis und Eiger">
+        <g class="layer far"><polygon fill="#bccbd9" points="0,330 120,280 210,310 320,240 420,300 520,262 640,320 760,236 860,292 980,214 1100,292 1200,252 1320,310 1440,270 1440,600 0,600"/></g>
+        <g class="layer mid">
+          <polygon fill="#7d9bb8" points="0,420 120,370 230,300 300,330 390,250 480,340 600,390 840,390 960,330 1060,190 1110,230 1180,210 1290,320 1440,350 1440,600 0,600"/>
+          <polygon fill="#fbf7ef" points="370,268 390,250 414,270 401,266 390,278"/>
+          <polygon fill="#fbf7ef" points="1035,215 1060,190 1088,212 1072,210 1060,226 1048,214"/>
+          <line x1="384" y1="246" x2="342" y2="226" stroke="#1c2837" stroke-width="1.5"/>
+          <text class="peak-label" x="336" y="222" text-anchor="end">Säntis</text>
+          <text class="peak-alt" x="336" y="238" text-anchor="end">2502 m ü. M.</text>
+          <line x1="1066" y1="186" x2="1110" y2="166" stroke="#1c2837" stroke-width="1.5"/>
+          <text class="peak-label" x="1116" y="162">Eiger</text>
+          <text class="peak-alt" x="1116" y="178">3967 m ü. M.</text>
+        </g>
+        <g class="layer near"><polygon fill="#30506f" points="0,540 140,500 300,520 440,486 540,472 900,472 1000,490 1120,470 1280,500 1440,480 1440,600 0,600"/></g>
+        <g transform="translate(530 63.5) scale(.95)">
+          <g id="hv" class="hero-vessel"></g>
+          <g class="hero-stubs"></g>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <div class="hero-buy" data-product>
+    <img class="hb-thumb" data-fly src="../assets/product/saentis-creme.jpg" alt=""/>
+    <div class="hb-info"><b id="hb-name">Säntis · Creme</b><span class="num" id="hb-price">CHF 14.99</span></div>
+    <div class="seg" role="group" aria-label="Modell" style="--i: 0">
+      <span class="seg-thumb" aria-hidden="true"></span>
+      <button type="button" aria-pressed="true" data-model="saentis">Säntis</button>
+      <button type="button" aria-pressed="false" data-model="eiger">Eiger</button>
+    </div>
+    <div class="dots" role="group" aria-label="Farbe">
+      <button type="button" style="background:#ece3d3" aria-label="Creme" aria-pressed="true" data-color="creme"></button>
+      <button type="button" style="background:#5c5a56" aria-label="Anthrazit" aria-pressed="false" data-color="anthrazit"></button>
+    </div>
+    <button class="btn btn-sun" type="button" id="hb-add" data-add="saentis-creme" data-done="✓ Im Korb" data-magnetic>In den Korb</button>
+  </div>
+
+  <section class="cards-real" aria-labelledby="real-h">
+    <div class="wrap">
+      <div class="real-head">
+        <span class="kicker caps">Echte Bilder</span>
+        <h2 class="sec-h" id="real-h">So sieht er in echt aus</h2>
+      </div>
+      <div class="postcards">
+        <a class="postcard" href="alpen-produkt.html#eiger-creme" data-speed="-6">
+          <img src="../assets/product/hero-outdoor-eiger.jpg" alt="Zwei brennende Eiger-Wachsfresser in Creme und Anthrazit auf einem Tisch im Freien"/>
+          <span class="pc-cap">Eiger in Creme und Anthrazit, draussen am Tisch</span>
+        </a>
+        <a class="postcard" href="alpen-produkt.html#saentis-creme" data-speed="4">
+          <img src="../assets/product/saentis-indoor-scene.jpg" alt="Säntis Wachsfresser in Creme brennt auf einem Holztisch"/>
+          <span class="pc-cap">Säntis in Creme, ein ruhiger Abend drinnen</span>
+          <span class="stamp" aria-hidden="true"><svg viewBox="0 0 60 70"><rect x="3" y="3" width="54" height="64" fill="#fbf7ef" stroke="#fbf7ef" stroke-width="6" stroke-dasharray="2 3"/><rect x="8" y="8" width="44" height="54" fill="#c7d6e4"/><polygon points="8,52 20,34 28,44 36,30 52,52 52,62 8,62" fill="#30506f"/><circle cx="40" cy="20" r="6" fill="#e8843a"/></svg><b>Schweiz</b></span>
+        </a>
+        <a class="postcard" href="alpen-produkt.html#eiger-anthrazit" data-speed="-3">
+          <img src="../assets/product/eiger-dinner-scene.jpg" alt="Eiger Wachsfresser bei einem Abendessen im Freien"/>
+          <span class="pc-cap">Eiger beim Abendessen unter Lichterketten</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="explain" id="prinzip">
+    <div class="ex-pin">
+      <div class="wrap ex-grid">
+        <div class="ex-text">
+          <span class="kicker caps">So funktioniert ein Wachsfresser</span>
+          <h2 class="sec-h">Aus Resten wird wieder Licht</h2>
+          <ol class="ex-steps">
+            <li class="ex-step"><span class="ex-num">1</span><div><b>Reste sammeln</b><p>Kerzenstummel und Wachsreste nicht wegwerfen, sondern aufheben.</p></div></li>
+            <li class="ex-step"><span class="ex-num">2</span><div><b>Nachlegen</b><p>Geeignete Reste in den Wachsfresser legen, bis etwa 1 cm unter den Docht.</p></div></li>
+            <li class="ex-step"><span class="ex-num">3</span><div><b>Schmelzen lassen</b><p>Der Dauerdocht brennt, die Reste schmelzen zu einer neuen Füllung.</p></div></li>
+            <li class="ex-step"><span class="ex-num">4</span><div><b>Licht, das bleibt</b><p>Das Gefäss bleibt, der Docht bleibt. Geliefert wird jeder Wachsfresser mit Sojawachs-Startfüllung.</p></div></li>
+          </ol>
+        </div>
+        <div class="ex-art" aria-hidden="true">
+          <svg viewBox="-150 -60 720 540">
+            <g id="ev" class="ex-vessel"></g>
+            <g class="ex-stubs"></g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="kollektion">
+    <div class="wrap">
+      <span class="kicker caps">Kollektion</span>
+      <h2 class="sec-h">Zwei Wachsfresser, zwei Gipfel</h2>
+      <div class="cards">
+        <article class="card saentis" data-product data-model="saentis" data-reveal>
+          <div class="card-head">
+            <h3>Säntis<small>Wachsfresser kompakt</small></h3>
+            <div class="alt"><b class="num">2502 m</b><span class="caps">ü. M.</span></div>
+          </div>
+          <div class="arch" data-tilt="4"><img data-fly src="../assets/product/saentis-creme.jpg" alt="Säntis Wachsfresser in Creme"/>
+            <svg class="ridge" viewBox="0 0 400 80" preserveAspectRatio="none" aria-hidden="true"><polygon fill="#f1d3a6" points="0,80 0,50 60,30 110,45 170,10 220,40 290,25 350,48 400,35 400,80"/></svg>
+          </div>
+          <div class="card-row">
+            <div class="swatches" role="group" aria-label="Farbe">
+              <button class="swatch" type="button" aria-pressed="true" data-color="creme"><i style="background:#e8e1d2"></i>Creme</button>
+              <button class="swatch" type="button" aria-pressed="false" data-color="anthrazit"><i style="background:#5c5a56"></i>Anthrazit</button>
+            </div>
+            <span class="price num">CHF 14.99</span>
+          </div>
+          <div class="card-row">
+            <span class="note">Glasfaserdocht · Sojawachs-Startfüllung</span>
+            <div class="btns"><a class="btn btn-ghost card-link" href="alpen-produkt.html#saentis-creme">Details</a><button class="btn btn-ink" type="button" data-add="saentis-creme" data-done="✓ Im Korb" data-magnetic>In den Korb</button></div>
+          </div>
+        </article>
+        <article class="card eiger" data-product data-model="eiger" data-reveal data-delay=".1">
+          <div class="card-head">
+            <h3>Eiger<small>Wachsfresser für draussen</small></h3>
+            <div class="alt"><b class="num">3967 m</b><span class="caps">ü. M.</span></div>
+          </div>
+          <div class="arch" data-tilt="4"><img data-fly src="../assets/product/eiger-creme.jpg" alt="Eiger Wachsfresser in Creme"/>
+            <svg class="ridge" viewBox="0 0 400 80" preserveAspectRatio="none" aria-hidden="true"><polygon fill="#c7d6e4" points="0,80 0,45 70,40 130,20 170,32 230,5 270,30 330,22 400,42 400,80"/></svg>
+          </div>
+          <div class="card-row">
+            <div class="swatches" role="group" aria-label="Farbe">
+              <button class="swatch" type="button" aria-pressed="true" data-color="creme"><i style="background:#e8e1d2"></i>Creme</button>
+              <button class="swatch" type="button" aria-pressed="false" data-color="anthrazit"><i style="background:#5c5a56"></i>Anthrazit</button>
+            </div>
+            <span class="price num">CHF 59.99</span>
+          </div>
+          <div class="card-row">
+            <span class="note">Holzfaserdocht · nur Aussenbereich</span>
+            <div class="btns"><a class="btn btn-ghost card-link" href="alpen-produkt.html#eiger-creme">Details</a><button class="btn btn-ink" type="button" data-add="eiger-creme" data-done="✓ Im Korb" data-magnetic>In den Korb</button></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section trail" id="entstehung">
+    <div class="wrap">
+      <span class="kicker caps" style="color: var(--sign)">Entstehung in Salmsach</span>
+      <h2 class="sec-h">In vier Etappen zum Wachsfresser</h2>
+      <div class="signs">
+        <div class="sign-wrap"><div class="post"><div class="sign"><b>Giessen</b><span>Etappe 1</span></div></div><p>Jedes Gefäss wird in Salmsach von Hand gegossen und nach dem Aushärten geprüft.</p></div>
+        <div class="sign-wrap"><div class="post"><div class="sign"><b>Docht setzen</b><span>Etappe 2</span></div></div><p>Glasfaserdocht für Säntis, Holzfaserdocht für Eiger.</p></div>
+        <div class="sign-wrap"><div class="post"><div class="sign"><b>Startwachs</b><span>Etappe 3</span></div></div><p>Mit Sojawachs gefüllt und direkt einsatzbereit, wenn das Paket ankommt.</p></div>
+        <div class="sign-wrap"><div class="post"><div class="sign"><b>Versand</b><span>Etappe 4</span></div></div><p>In der Schweiz in der Regel ca. 3 Werktage bis zu dir.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="geschichte">
+    <div class="wrap story">
+      <div class="arch" data-reveal><img class="par" src="../assets/product/saentis-indoor-scene.jpg" alt="Säntis Wachsfresser brennt auf einem Holztisch in einer Wohnszene"/></div>
+      <div data-reveal data-delay=".1">
+        <span class="kicker caps">Aus Salmsach</span>
+        <blockquote>Das Gefäss bleibt. Du legst Wachs nach, und das Licht kommt zurück.</blockquote>
+        <cite class="caps">Wachsfresser Schweiz</cite>
+      </div>
+    </div>
+  </section>
+
+  <section class="night">
+    <div class="stars" aria-hidden="true"></div>
+    <div class="night-art" aria-hidden="true"><svg viewBox="-20 -40 460 500"><g id="nv"></g></svg></div>
+    <h2>Licht für <em>lange</em> Abende</h2>
+    <p>Säntis ab CHF 14.99, Eiger ab CHF 59.99. Versand in der Schweiz in der Regel ca. 3 Werktage.</p>
+    <div class="btns">
+      <a class="btn btn-sun" href="#kollektion" data-magnetic>Wachsfresser wählen</a>
+      <a class="btn btn-ghost" href="#prinzip">So funktioniert’s</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot caps">
+  <div class="wrap"><span>Wachsfresser · Salmsach TG</span><span>hallo@wachsfresser-schweiz.ch</span><span>Impressum · Datenschutz · AGB</span></div>
+</footer>
+
+<script src="https://unpkg.com/gsap@3.13.0/dist/gsap.min.js" integrity="sha384-HOvlOYPIs/zjoIkWUGXkVmXsjr8GuZLV+Q+rcPwmJOVZVpvTSXQChiN4t9Euv9Vc" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/gsap@3.13.0/dist/ScrollTrigger.min.js" integrity="sha384-P8VzCVnT9NBUkMrpcIZrJbA7EBjJvh/fJS6PmP+4nLIM284DtsImIv8D0fFjIkeh" crossorigin="anonymous"></script>
+<script src="../motion.js"></script>
+<script src="mockup-kit.js"></script>
+<script src="alpen-vessel.js"></script>
+<script>
+(function () {
+  const { vesselMarkup, stubMarkup, COLORS } = AlpenVessel;
+  const M = window.WFMotion;
+  const anim = !!(M && M.enabled);
+  const gsap = M && M.gsap;
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  /* ---------- Gefässe rendern ---------- */
+  const sel = { model: 'saentis', color: 'creme' };
+  const hv = $('#hv');
+  const ev = $('#ev');
+  hv.innerHTML = vesselMarkup('hv', sel);
+  ev.innerHTML = vesselMarkup('ev', { model: 'saentis', color: 'creme' });
+  $('#nv').innerHTML = vesselMarkup('nv', { model: 'eiger', color: 'anthrazit' });
+  $('.hero-stubs').innerHTML = [0, 1, 2].map(stubMarkup).join('');
+  $('.ex-stubs').innerHTML = [0, 1, 2, 3, 4].map(stubMarkup).join('');
+
+  // Sterne fürs Nachtplakat
+  const stars = $('.stars');
+  for (let i = 0; i < 70; i++) {
+    const s = document.createElement('i');
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 70 + '%';
+    s.style.opacity = (.25 + Math.random() * .6).toFixed(2);
+    stars.appendChild(s);
+  }
+
+  /* ---------- Lebendige Flamme: Flackern, Glut, Wind ---------- */
+  const loops = new Map();
+  function liveFlame(root, withHalo = true) {
+    if (!anim) return;
+    (loops.get(root) || []).forEach(t => t.kill());
+    const flame = $('.v-flame', root);
+    const halo = $('.v-halo', root);
+    const embers = $('.v-embers', root);
+    const tws = [];
+    tws.push(gsap.to(flame, { scaleX: 'random(0.9, 1.07)', scaleY: 'random(0.9, 1.12)', duration: 'random(0.08, 0.22)', ease: 'sine.inOut', repeat: -1, repeatRefresh: true, transformOrigin: '50% 100%' }));
+    if (withHalo) tws.push(gsap.to(halo, { scale: 1.06, opacity: .8, duration: 1.8, yoyo: true, repeat: -1, ease: 'sine.inOut', transformOrigin: '50% 50%' }));
+    embers.innerHTML = '';
+    for (let i = 0; i < 7; i++) {
+      const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('r', (1.4 + Math.random() * 1.8).toFixed(1));
+      c.setAttribute('fill', i % 2 ? '#f6c400' : '#e8843a');
+      const x0 = 200 + (Math.random() - .5) * 14;
+      c.setAttribute('cx', x0.toFixed(1));
+      c.setAttribute('cy', '70');
+      c.setAttribute('opacity', '0');
+      embers.appendChild(c);
+      tws.push(gsap.fromTo(c, { attr: { cx: x0, cy: 70 }, opacity: 1 },
+        { attr: { cx: x0 + (Math.random() - .5) * 70, cy: -90 - Math.random() * 60 }, opacity: 0, duration: 2 + Math.random() * 1.6, ease: 'power1.out', repeat: -1, delay: Math.random() * 2.4 }));
+    }
+    loops.set(root, tws);
+  }
+
+  /* ---------- Hero-Intro: Gefäss landet, Reste fallen hinein, Flamme zündet ---------- */
+  function heroIntro() {
+    const stubs = $$('.hero-stubs .v-stub');
+    const tl = gsap.timeline({ defaults: { ease: 'expo.out' }, onComplete: () => { liveFlame(hv); wind(); } });
+    tl.from('.range .far', { yPercent: 16, duration: 1.8 }, 0)
+      .from('.range .mid', { yPercent: 24, duration: 1.8 }, .05)
+      .from('.range .near', { yPercent: 34, duration: 1.6 }, .1)
+      .from('.poster-title h1 .ch', { yPercent: 120, opacity: 0, rotate: 8, duration: 1.1, stagger: .045 }, .15)
+      .from('.poster-title .eyebrow, .poster-title p, .poster-top', { y: 20, opacity: 0, duration: 1, stagger: .1 }, .5)
+      .from('#hv .v-body', { y: -420, duration: 1, ease: 'bounce.out' }, .55)
+      .from('#hv .v-shadow', { scale: .2, opacity: 0, transformOrigin: '50% 50%', duration: 1, ease: 'bounce.out' }, .55)
+      .set('#hv .v-flame', { scale: 0, transformOrigin: '50% 100%' }, 0)
+      .set('#hv .v-halo', { scale: 0, opacity: 0, transformOrigin: '50% 50%' }, 0)
+      .set('.hero-stubs', { opacity: 1 }, 1.4);
+    if ($('#hv .v-lid')) tl.from('#hv .v-lid', { rotation: 35, opacity: 0, transformOrigin: '100% 100%', duration: .8, ease: 'back.out(2)' }, 1.3);
+    stubs.forEach((s, i) => {
+      const at = 1.45 + i * .32;
+      tl.fromTo(s, { x: 120 + i * 80, y: -330, rotation: -40 + i * 40, opacity: 1 }, { x: 200, y: 176, rotation: 0, duration: .55, ease: 'power2.in' }, at)
+        .to(s, { scale: .3, opacity: 0, duration: .15, ease: 'none', transformOrigin: '50% 100%' }, at + .55)
+        .fromTo('#hv .v-wax', { scaleY: 1 }, { scaleY: 1.35, duration: .12, yoyo: true, repeat: 1, transformOrigin: '50% 50%', ease: 'power1.out' }, at + .55);
+    });
+    tl.to('#hv .v-flame', { scale: 1, duration: 1, ease: 'elastic.out(1, .45)' }, '+=.15')
+      .to('#hv .v-halo', { scale: 1, opacity: 1, duration: 1.4 }, '<')
+      .from('.hero-buy', { y: 30, opacity: 0, duration: 1 }, '<.1');
+  }
+
+  /* Flamme neigt sich mit der Maus wie im Wind */
+  let windX = null;
+  function wind() {
+    if (!anim || !M.finePointer) return;
+    const w = $('#hv .v-wind');
+    gsap.set(w, { transformOrigin: '50% 100%' });
+    windX = gsap.quickTo(w, 'skewX', { duration: .9, ease: 'power3.out' });
+  }
+  let lastX = null;
+  if (anim && M.finePointer) {
+    window.addEventListener('pointermove', e => {
+      if (!windX) return;
+      const dx = lastX === null ? 0 : e.clientX - lastX;
+      lastX = e.clientX;
+      windX(Math.max(-14, Math.min(14, -dx * .6)));
+      clearTimeout(wind.t);
+      wind.t = setTimeout(() => windX && windX(0), 120);
+    }, { passive: true });
+  }
+
+  /* ---------- Konfigurator in der Kaufleiste ---------- */
+  function updateBuy() {
+    const id = `${sel.model}-${sel.color}`;
+    const p = MK.PRODUCTS[id];
+    $('#hb-name').textContent = `${p.name} · ${p.color}`;
+    $('#hb-price').textContent = MK.chf(p.price);
+    $('#hb-add').dataset.add = id;
+    $('.hb-thumb').src = p.img;
+    $('.seg').style.setProperty('--i', sel.model === 'eiger' ? 1 : 0);
+    $$('.seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.model === sel.model)));
+    $$('.hero-buy .dots button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.color === sel.color)));
+  }
+  function swapModel(model) {
+    if (model === sel.model) return;
+    sel.model = model;
+    updateBuy();
+    if (!anim) { hv.innerHTML = vesselMarkup('hv', sel); return; }
+    gsap.to(hv, {
+      scaleY: .2, scaleX: 1.2, opacity: 0, duration: .3, ease: 'power3.in', transformOrigin: '50% 100%', overwrite: true,
+      onComplete: () => {
+        (loops.get(hv) || []).forEach(t => t.kill());
+        hv.innerHTML = vesselMarkup('hv', sel);
+        gsap.set('#hv .v-flame', { scale: 0, transformOrigin: '50% 100%' });
+        const tl = gsap.timeline({ onComplete: () => { liveFlame(hv); wind(); } });
+        tl.to(hv, { scaleY: 1, scaleX: 1, opacity: 1, duration: .9, ease: 'elastic.out(1, .5)' })
+          .to('#hv .v-flame', { scale: 1, duration: .8, ease: 'elastic.out(1, .45)' }, '-=.5');
+        if ($('#hv .v-lid')) tl.from('#hv .v-lid', { rotation: 35, opacity: 0, transformOrigin: '100% 100%', duration: .7, ease: 'back.out(2)' }, '-=.9');
+      },
+    });
+  }
+  function swapColor(color) {
+    if (color === sel.color) return;
+    sel.color = color;
+    updateBuy();
+    const C = COLORS[color];
+    const set = (el, prop, v) => anim ? gsap.to(el, { [prop]: v, duration: .7, ease: 'power2.inOut' }) : (el.style[prop] = v);
+    set($('#hv .v-f1'), 'stopColor', C.f1);
+    set($('#hv .v-f2'), 'stopColor', C.f2);
+    set($('#hv .v-top'), 'fill', C.top);
+    set($('#hv .v-well'), 'fill', C.well);
+    if (anim) gsap.fromTo(hv, { rotation: -3 }, { rotation: 0, duration: 1, ease: 'elastic.out(1, .4)', transformOrigin: '50% 100%' });
+  }
+  $$('.seg button').forEach(b => b.addEventListener('click', () => swapModel(b.dataset.model)));
+  $$('.hero-buy .dots button').forEach(b => b.addEventListener('click', () => swapColor(b.dataset.color)));
+
+  /* ---------- Kollektion: Farbwahl je Karte ---------- */
+  $$('.card').forEach(card => {
+    const model = card.dataset.model;
+    const img = $('[data-fly]', card);
+    const add = $('[data-add]', card);
+    $$('.swatch', card).forEach(sw => sw.addEventListener('click', () => {
+      $$('.swatch', card).forEach(o => o.setAttribute('aria-pressed', String(o === sw)));
+      const id = `${model}-${sw.dataset.color}`;
+      add.dataset.add = id;
+      $('.card-link', card).href = `alpen-produkt.html#${id}`;
+      const p = MK.PRODUCTS[id];
+      if (anim) gsap.to(img, { opacity: 0, scale: 1.05, duration: .25, onComplete: () => { img.src = p.img; img.alt = `${p.name} in ${p.color}`; gsap.to(img, { opacity: 1, scale: 1, duration: .5, ease: 'expo.out' }); } });
+      else { img.src = p.img; img.alt = `${p.name} in ${p.color}`; }
+    }));
+  });
+
+  MK.wire();
+  if (!anim) return;
+
+  /* Titel in Buchstaben zerlegen */
+  const h1 = $('[data-split]');
+  h1.setAttribute('aria-label', h1.textContent);
+  h1.innerHTML = [...h1.textContent].map(c => `<span class="ch" aria-hidden="true">${c}</span>`).join('');
+  heroIntro();
+  liveFlame($('#nv'));
+
+  /* Plakat-Parallax beim Scrollen */
+  const st = { trigger: '.poster', start: 'top top', end: 'bottom top', scrub: true };
+  gsap.to('.range .far', { yPercent: -8, ease: 'none', scrollTrigger: st });
+  gsap.to('.range .mid', { yPercent: -4, ease: 'none', scrollTrigger: st });
+  gsap.to('.poster-title', { y: -60, opacity: .4, ease: 'none', scrollTrigger: st });
+
+  /* ---------- So funktioniert's: Szene folgt dem Scrollen ---------- */
+  const steps = $$('.ex-step');
+  const exStubs = $$('.ex-stubs .v-stub');
+  const starts = [[-90, 150, -22], [500, 110, 18], [-60, 360, 14], [520, 330, -16], [230, -40, 10]];
+  exStubs.forEach((s, i) => gsap.set(s, { x: starts[i][0], y: starts[i][1], rotation: starts[i][2], opacity: 0 }));
+  gsap.set('#ev .v-wind', { scale: 0, transformOrigin: '50% 100%' });
+  gsap.set('#ev .v-halo', { scale: 0, opacity: 0, transformOrigin: '50% 50%' });
+  gsap.set('#ev .v-wax', { attr: { cy: 181, rx: 66, ry: 8 } });
+  gsap.set(steps[0], { opacity: 1 });
+  const active = (i) => steps.map((s, k) => gsap.to(s, { opacity: k === i ? 1 : .3, duration: .4 }));
+
+  const ex = gsap.timeline({
+    defaults: { ease: 'power2.inOut' },
+    scrollTrigger: { trigger: '.explain', start: 'top 64px', end: '+=2600', scrub: .8, pin: '.ex-pin', anticipatePin: 1 },
+  });
+  ex.to(exStubs, { opacity: 1, y: '-=30', duration: 1, stagger: .12, ease: 'power2.out' })
+    .to({}, { duration: .4 })
+    .add(active(1))
+    .to(exStubs, { x: 200, y: 176, rotation: 0, duration: 1.6, stagger: .18, ease: 'power2.in' })
+    .to(exStubs, { scale: .25, opacity: 0, duration: .25, stagger: .18, transformOrigin: '50% 100%' }, '<1.4')
+    .to('#ev .v-blob', { opacity: 1, duration: .3, stagger: .08 }, '<')
+    .add(active(2))
+    .to('#ev .v-wax', { attr: { cy: 171, rx: 78, ry: 11 }, duration: 1.4 })
+    .to('#ev .v-blob', { scale: .2, opacity: 0, duration: 1.2, stagger: .1, transformOrigin: '50% 50%' }, '<.2')
+    .add(active(3))
+    .to('#ev .v-wind', { scale: 1, duration: 1, ease: 'back.out(2)' })
+    .to('#ev .v-halo', { scale: 1, opacity: 1, duration: 1.2, ease: 'power2.out' }, '<')
+    .to('.explain', { backgroundColor: '#1f3048', color: '#fbf7ef', duration: 1.4 }, '<')
+    .to({}, { duration: .6 });
+  liveFlame(ev, false);
+  // Die Glut läuft dauerhaft, wird aber erst mit der Flamme sichtbar
+  gsap.set('#ev .v-embers', { opacity: 0 });
+  ex.to('#ev .v-embers', { opacity: 1, duration: .5 }, '-=1.4');
+
+  /* Postkarten fliegen ein und schweben beim Scrollen unterschiedlich schnell */
+  gsap.from('.postcard', { y: 120, rotation: (i) => [-14, 12, -8][i], opacity: 0, duration: 1.3, stagger: .14, ease: 'expo.out', scrollTrigger: { trigger: '.postcards', start: 'top 85%' } });
+  $$('.postcard').forEach(pc => gsap.to(pc, { y: () => Number(pc.dataset.speed) * 10, ease: 'none', scrollTrigger: { trigger: '.postcards', start: 'top bottom', end: 'bottom top', scrub: true } }));
+
+  /* Wegweiser, Bilder, Nachtplakat */
+  gsap.from('.sign', { rotate: -14, x: -30, opacity: 0, duration: 1.2, stagger: .14, ease: 'elastic.out(1, .55)', scrollTrigger: { trigger: '.signs', start: 'top 80%' } });
+  $$('.par').forEach(img => gsap.fromTo(img, { yPercent: -6, scale: 1.15 }, { yPercent: 6, ease: 'none', scrollTrigger: { trigger: img.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }));
+  gsap.from('.night-art, .night h2, .night p, .night .btns', { y: 40, opacity: 0, duration: 1, stagger: .1, ease: 'expo.out', scrollTrigger: { trigger: '.night', start: 'top 75%' } });
+  MK.reveals();
+})();
+</script>
+</body>
+</html>
