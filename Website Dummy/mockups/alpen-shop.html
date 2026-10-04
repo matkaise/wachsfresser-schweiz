@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Wachsfresser · Alpenplakat · Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap"/>
+<link rel="stylesheet" href="alpen.css"/>
+<style>
+/* Layout: kurzes Plakat als Kopf, darunter grosse echte Produktfotos in Plakatkarten, Vergleich wie eine Wandertafel */
+
+/* Kopf */
+.head { position: relative; margin: 0 var(--gut); border-radius: 6px; overflow: hidden; background: linear-gradient(180deg, #f2c995 0%, var(--dawn) 45%, #f8eadb 100%); padding: clamp(40px, 6vw, 72px) clamp(24px, 5vw, 64px) 0; }
+.head-frame { position: absolute; inset: 14px; border: 2px solid rgba(28, 40, 55, .5); border-radius: 3px; pointer-events: none; z-index: 3; }
+.head-grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(24px, 4vw, 64px); align-items: end; }
+.head-copy { display: grid; gap: 14px; min-width: 0; }
+.head-photo { position: relative; aspect-ratio: 4 / 4.2; border-radius: 999px 999px 6px 6px; overflow: hidden; margin-bottom: calc(-1 * clamp(40px, 5vw, 70px)); box-shadow: 0 30px 60px -30px rgba(28, 40, 55, .6); }
+.head-photo img { width: 100%; height: 100%; object-fit: cover; }
+.head-photo span { position: absolute; left: 50%; bottom: 18%; transform: translateX(-50%); white-space: nowrap; padding: 6px 12px; border-radius: 999px; background: rgba(251, 247, 239, .92); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+.crumbs { display: flex; gap: 10px; color: rgba(28, 40, 55, .7); }
+.crumbs a:hover { color: var(--sun); }
+.head h1 { font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: clamp(36px, 6.6vw, 104px); line-height: .9; white-space: nowrap; }
+.head h1 .ch { display: inline-block; }
+.head p { font-size: clamp(16px, 1.6vw, 20px); max-width: 52ch; }
+.head-range { position: relative; z-index: 1; height: clamp(90px, 10vw, 150px); margin-top: clamp(-60px, -3vw, -20px); margin-inline: calc(-1 * clamp(24px, 5vw, 64px)); }
+.head-range svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* Werkzeugleiste */
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-block: clamp(32px, 4vw, 48px) 24px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { padding: 9px 16px; border-radius: 999px; box-shadow: inset 0 0 0 1.5px rgba(28, 40, 55, .25); font-size: 14px; font-weight: 500; transition: background .3s, color .3s, box-shadow .3s; }
+.pill:hover { box-shadow: inset 0 0 0 1.5px var(--ink); }
+.pill[aria-pressed="true"] { background: var(--ink); color: var(--snow); box-shadow: none; }
+.pill i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+.count { color: #55606c; }
+
+/* Produktkarten */
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gut); }
+.pcard { border-radius: 6px; overflow: hidden; display: grid; }
+.pmedia { position: relative; display: block; aspect-ratio: 5 / 4; overflow: hidden; background: #f2efe9; }
+.pmedia img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .6s var(--ease), transform 1.2s var(--ease); }
+.pmedia .alt { opacity: 0; transform: scale(1.06); }
+.pcard:hover .pmedia .alt, .pmedia:focus-visible .alt { opacity: 1; transform: scale(1); }
+.pcard:hover .pmedia .main { transform: scale(1.03); }
+.pbadges { position: absolute; z-index: 2; left: 16px; top: 16px; right: 16px; display: flex; justify-content: space-between; gap: 8px; }
+.pbadge { padding: 6px 12px; border-radius: 999px; background: rgba(251, 247, 239, .92); font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+.psign { padding: 6px 22px 6px 12px; background: var(--sign); color: #111; font-size: 12px; font-weight: 700; letter-spacing: .04em; clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%); }
+.phint { position: absolute; z-index: 2; left: 16px; bottom: 14px; padding: 5px 10px; border-radius: 999px; background: rgba(28, 40, 55, .72); color: var(--snow); font-size: 12px; opacity: 0; transform: translateY(6px); transition: opacity .4s, transform .4s var(--ease); }
+.pcard:hover .phint { opacity: 1; transform: none; }
+.pinfo { padding: 22px 24px 24px; display: grid; gap: 14px; }
+.pinfo-top { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.pinfo h2 { font-weight: 700; text-transform: uppercase; letter-spacing: .14em; font-size: clamp(26px, 2.6vw, 36px); line-height: 1; }
+.pinfo h2 small { display: block; margin-top: 8px; font-size: 12px; letter-spacing: .2em; font-weight: 500; }
+.pprice { font-size: 26px; font-weight: 600; }
+.pmeta { font-size: 15px; }
+.pactions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* Vergleich */
+.compare { margin-top: clamp(72px, 9vw, 128px); }
+.ctable { margin-top: 28px; border-radius: 6px; overflow: hidden; background: var(--near); color: var(--snow); }
+.crow { display: grid; grid-template-columns: 1fr 1.2fr 1.2fr; gap: 16px; padding: 16px clamp(16px, 3vw, 32px); border-top: 1px solid rgba(251, 247, 239, .12); align-items: center; }
+.crow:first-child { border-top: 0; }
+.crow.head-row { background: rgba(0, 0, 0, .14); }
+.crow.head-row b { font-size: 22px; letter-spacing: .14em; text-transform: uppercase; }
+.crow span:first-child { color: rgba(251, 247, 239, .65); }
+.crow .yes { color: var(--sign); font-weight: 600; }
+
+/* Info und Teaser */
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gut); margin-top: clamp(56px, 7vw, 96px); }
+.fact { display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; }
+.fact svg { width: 44px; height: 44px; }
+.fact b { display: block; font-size: 18px; }
+.teaser { margin-top: clamp(56px, 7vw, 96px); border-radius: 6px; overflow: hidden; background: linear-gradient(180deg, #13202f, #23395a); color: var(--snow); display: grid; grid-template-columns: 220px 1fr; gap: clamp(24px, 4vw, 56px); align-items: center; padding: clamp(28px, 4vw, 48px); }
+.teaser svg { width: 100%; height: auto; overflow: visible; display: block; }
+.teaser .v-halo { mix-blend-mode: screen; }
+.teaser h2 { font-weight: 600; text-transform: uppercase; letter-spacing: .08em; font-size: clamp(26px, 3vw, 40px); line-height: 1.05; }
+.teaser p { margin-block: 12px 20px; max-width: 48ch; color: rgba(251, 247, 239, .8); }
+
+@media (max-width: 900px) {
+  .grid, .facts { grid-template-columns: 1fr; }
+  .head-grid { grid-template-columns: 1fr; }
+  .head-photo { aspect-ratio: 16 / 10; border-radius: 6px; margin-bottom: -30px; }
+  .teaser { grid-template-columns: 1fr; text-align: center; }
+  .teaser > div:first-child { width: 160px; margin: 0 auto; }
+  .teaser p { margin-inline: auto; }
+  .teaser .btns { justify-content: center; }
+  .crow { grid-template-columns: .9fr 1fr 1fr; font-size: 14px; }
+  .crow.head-row b { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+<div id="nav-slot"></div>
+
+<main>
+  <section class="head">
+    <div class="head-frame" aria-hidden="true"></div>
+    <div class="head-grid">
+      <div class="head-copy">
+        <nav class="crumbs caps" aria-label="Pfad"><a href="alpen.html">Start</a><span>/</span><span>Shop</span></nav>
+        <h1 data-split>Kollektion</h1>
+        <p>Zwei Wachsfresser, zwei Farben. Jeder wird in Salmsach von Hand gegossen und kommt einsatzbereit mit Docht und Sojawachs-Startfüllung.</p>
+      </div>
+      <figure class="head-photo"><img src="../assets/product/hero-outdoor-eiger.jpg" alt="Zwei brennende Eiger-Wachsfresser in Creme und Anthrazit auf einem Tisch im Freien"/><span>Eiger · Creme &amp; Anthrazit</span></figure>
+    </div>
+    <div class="head-range" aria-hidden="true">
+      <svg viewBox="0 0 1440 200" preserveAspectRatio="none">
+        <polygon class="far" fill="#bccbd9" points="0,90 140,50 260,80 380,30 520,85 660,40 800,90 940,20 1080,70 1220,35 1340,75 1440,50 1440,200 0,200"/>
+        <polygon class="mid" fill="#7d9bb8" points="0,140 160,90 300,120 420,70 560,130 700,95 860,140 1000,80 1140,125 1300,90 1440,120 1440,200 0,200"/>
+        <polygon class="near" fill="#30506f" points="0,180 200,150 380,170 560,140 760,175 940,150 1140,172 1300,152 1440,168 1440,200 0,200"/>
+      </svg>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="toolbar">
+      <div class="filters">
+        <div class="pills" role="group" aria-label="Modell">
+          <button class="pill" type="button" data-f-model="all" aria-pressed="true">Alle</button>
+          <button class="pill" type="button" data-f-model="saentis" aria-pressed="false">Säntis</button>
+          <button class="pill" type="button" data-f-model="eiger" aria-pressed="false">Eiger</button>
+        </div>
+        <div class="pills" role="group" aria-label="Farbe">
+          <button class="pill" type="button" data-f-color="all" aria-pressed="true">Alle Farben</button>
+          <button class="pill" type="button" data-f-color="creme" aria-pressed="false"><i style="background:#e8e1d2"></i>Creme</button>
+          <button class="pill" type="button" data-f-color="anthrazit" aria-pressed="false"><i style="background:#5c5a56"></i>Anthrazit</button>
+        </div>
+      </div>
+      <span class="count caps" id="count" aria-live="polite">4 Wachsfresser</span>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <section class="compare" aria-labelledby="cmp-h">
+      <span class="kicker caps">Entscheidungshilfe</span>
+      <h2 class="sec-h" id="cmp-h">Säntis oder Eiger?</h2>
+      <div class="ctable" role="table" aria-label="Vergleich Säntis und Eiger">
+        <div class="crow head-row" role="row"><span></span><b>Säntis</b><b>Eiger</b></div>
+        <div class="crow" role="row"><span>Format</span><span>Kompakt</span><span>Massiv</span></div>
+        <div class="crow" role="row"><span>Docht</span><span>Glasfaserdocht</span><span>Holzfaserdocht</span></div>
+        <div class="crow" role="row"><span>Einsatz</span><span>Für ruhige Lichtmomente</span><span class="yes">Nur Aussenbereich</span></div>
+        <div class="crow" role="row"><span>Deckel</span><span>Ohne</span><span>Holzdeckel</span></div>
+        <div class="crow" role="row"><span>Farben</span><span>Creme, Anthrazit</span><span>Creme, Anthrazit</span></div>
+        <div class="crow" role="row"><span>Preis</span><span class="num">CHF 14.99</span><span class="num">CHF 59.99</span></div>
+      </div>
+    </section>
+
+    <section class="facts" aria-label="Gut zu wissen">
+      <div class="fact" data-reveal><svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="21" fill="#f1d3a6"/><path d="M22 10c1 4 6 6 6 12a6 6 0 0 1-12 0c0-3 1.6-4.8 3-6 .2 2 1 3 2.4 3.6 0-3.6 0-6.4.6-9.6Z" fill="#e8843a"/></svg><div><b>Einsatzbereit</b>Mit Docht und Sojawachs-Startfüllung.</div></div>
+      <div class="fact" data-reveal data-delay=".08"><svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="21" fill="#c7d6e4"/><path d="M8 32 18 16l6 9 4-5 8 12Z" fill="#30506f"/></svg><div><b>Handgegossen</b>In Salmsach, Thurgau.</div></div>
+      <div class="fact" data-reveal data-delay=".16"><svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="21" fill="#f6c400"/><path d="M11 16h14v12H11zM25 20h5l3 4v4h-8" fill="none" stroke="#1c2837" stroke-width="2" stroke-linejoin="round"/><circle cx="16" cy="29" r="2.4" fill="#1c2837"/><circle cx="29" cy="29" r="2.4" fill="#1c2837"/></svg><div><b>Versand Schweiz</b>In der Regel ca. 3 Werktage.</div></div>
+    </section>
+
+    <section class="teaser" aria-labelledby="t-h">
+      <div aria-hidden="true"><svg viewBox="-20 -60 460 520"><g id="tv"></g></svg></div>
+      <div>
+        <span class="kicker caps" style="color: var(--sign)">Neu hier?</span>
+        <h2 id="t-h">So funktioniert ein Wachsfresser</h2>
+        <p>Kerzenreste nachlegen, anzünden, weiterbrennen. Das Gefäss bleibt, der Docht bleibt.</p>
+        <div class="btns"><a class="btn btn-sun" href="alpen.html#prinzip" data-magnetic>Ansehen</a></div>
+      </div>
+    </section>
+  </div>
+</main>
+<div id="foot-slot" style="margin-top: clamp(48px, 6vw, 80px)"></div>
+
+<script src="https://unpkg.com/gsap@3.13.0/dist/gsap.min.js" integrity="sha384-HOvlOYPIs/zjoIkWUGXkVmXsjr8GuZLV+Q+rcPwmJOVZVpvTSXQChiN4t9Euv9Vc" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/gsap@3.13.0/dist/ScrollTrigger.min.js" integrity="sha384-P8VzCVnT9NBUkMrpcIZrJbA7EBjJvh/fJS6PmP+4nLIM284DtsImIv8D0fFjIkeh" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/gsap@3.13.0/dist/Flip.min.js" integrity="sha384-lg3+EgIwmxYq9YD4ix279pdUEasqmOS17fF+2mI/NEg6JHkawYaWYpJ6nKZenPOy" crossorigin="anonymous"></script>
+<script src="../motion.js"></script>
+<script src="mockup-kit.js"></script>
+<script src="alpen-vessel.js"></script>
+<script src="alpen-data.js"></script>
+<script>
+(function () {
+  const { MODELS, SWATCH, nav, footer, idParts } = ALPEN;
+  const { PRODUCTS, chf } = MK;
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  $('#nav-slot').outerHTML = nav('shop');
+  $('#foot-slot').innerHTML = footer();
+
+  // Produktkarten mit echtem Foto und Szenenbild beim Überfahren
+  $('#grid').innerHTML = Object.entries(PRODUCTS).map(([id, p]) => {
+    const { model, color } = idParts(id);
+    const m = MODELS[model];
+    return `<article class="pcard" data-product data-model="${model}" data-color="${color}" style="background:${m.tint}">
+      <a class="pmedia" href="alpen-produkt.html#${id}" aria-label="${p.name} in ${p.color} ansehen">
+        <img class="main" data-fly src="${p.img}" alt="${p.name} Wachsfresser in ${p.color}"/>
+        <img class="alt" src="${m.scene}" alt="" loading="lazy"/>
+        <span class="pbadges"><span class="pbadge">${m.name} · ${m.alt} m</span>${m.outdoorOnly ? '<span class="psign">Nur Aussenbereich</span>' : ''}</span>
+        <span class="phint">${m.sceneAlt}</span>
+      </a>
+      <div class="pinfo">
+        <div class="pinfo-top"><h2>${p.name}<small>${m.kind} · ${p.color}</small></h2><span class="pprice num">${chf(p.price)}</span></div>
+        <span class="pmeta">${m.wick} · Sojawachs-Startfüllung${model === 'eiger' ? ' · Holzdeckel' : ''}</span>
+        <div class="pactions">
+          <button class="btn btn-ink" type="button" data-add="${id}" data-done="✓ Im Korb" data-magnetic>In den Korb</button>
+          <a class="btn btn-ghost" href="alpen-produkt.html#${id}">Ansehen</a>
+        </div>
+      </div>
+    </article>`;
+  }).join('');
+
+  // Teaser-Illustration
+  $('#tv').innerHTML = AlpenVessel.vesselMarkup('tv', { model: 'saentis', color: 'creme' });
+
+  // Filter
+  const state = { model: 'all', color: 'all' };
+  const M = window.WFMotion;
+  const anim = !!(M && M.enabled);
+  const Flip = window.Flip;
+  if (anim && Flip) M.gsap.registerPlugin(Flip);
+  function applyFilter() {
+    const cards = $$('.pcard');
+    const flipState = anim && Flip ? Flip.getState(cards) : null;
+    let n = 0;
+    cards.forEach(c => {
+      const show = (state.model === 'all' || c.dataset.model === state.model) && (state.color === 'all' || c.dataset.color === state.color);
+      c.style.display = show ? '' : 'none';
+      if (show) n++;
+    });
+    $('#count').textContent = `${n} Wachsfresser`;
+    if (flipState) {
+      Flip.from(flipState, {
+        duration: .7, ease: 'power3.inOut', absolute: true, scale: true,
+        onEnter: els => M.gsap.fromTo(els, { opacity: 0, scale: .9 }, { opacity: 1, scale: 1, duration: .6, ease: 'expo.out' }),
+        onLeave: els => M.gsap.to(els, { opacity: 0, scale: .9, duration: .35 }),
+      });
+    }
+  }
+  $$('[data-f-model]').forEach(b => b.addEventListener('click', () => {
+    state.model = b.dataset.fModel;
+    $$('[data-f-model]').forEach(o => o.setAttribute('aria-pressed', String(o === b)));
+    applyFilter();
+  }));
+  $$('[data-f-color]').forEach(b => b.addEventListener('click', () => {
+    state.color = b.dataset.fColor;
+    $$('[data-f-color]').forEach(o => o.setAttribute('aria-pressed', String(o === b)));
+    applyFilter();
+  }));
+
+  MK.wire();
+  if (!anim) return;
+  const { gsap } = M;
+
+  // Kopf: Buchstaben, Berge, Karten
+  const h1 = $('[data-split]');
+  h1.setAttribute('aria-label', h1.textContent);
+  h1.innerHTML = [...h1.textContent].map(c => `<span class="ch" aria-hidden="true">${c}</span>`).join('');
+  gsap.timeline({ defaults: { ease: 'expo.out' } })
+    .from('.head-range .far', { yPercent: 40, duration: 1.6 }, 0)
+    .from('.head-range .mid', { yPercent: 50, duration: 1.6 }, .05)
+    .from('.head-range .near', { yPercent: 60, duration: 1.6 }, .1)
+    .from('.head h1 .ch', { yPercent: 110, opacity: 0, rotate: 6, duration: 1, stagger: .05 }, .1)
+    .from('.crumbs, .head p', { y: 16, opacity: 0, duration: .9, stagger: .1 }, .4)
+    .from('.head-photo', { clipPath: 'inset(100% 0 0 0 round 999px 999px 6px 6px)', duration: 1.4, ease: 'power3.inOut' }, .3)
+    .from('.head-photo img', { scale: 1.3, duration: 1.8 }, .3)
+    .from('.toolbar', { y: 20, opacity: 0, duration: .9 }, .6)
+    .from('.pcard', { y: 60, opacity: 0, duration: 1.1, stagger: .1 }, .7);
+  gsap.from('.crow', { x: -30, opacity: 0, duration: .8, stagger: .06, ease: 'expo.out', scrollTrigger: { trigger: '.ctable', start: 'top 80%' } });
+  gsap.from('.teaser', { y: 50, opacity: 0, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '.teaser', start: 'top 85%' } });
+  AlpenVessel.live($('#tv'), gsap);
+  MK.reveals();
+})();
+</script>
+</body>
+</html>

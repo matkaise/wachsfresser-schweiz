@@ -87,5 +87,29 @@
       <rect x="-1" y="${-h - 8}" width="2" height="9" rx="1" fill="#2a221c"/></g>`;
   }
 
-  window.AlpenVessel = { COLORS, STUB_COLORS, vesselMarkup, stubMarkup };
+  /* Flamme lebendig machen: Flackern, Lichtringe atmen, Glut steigt auf. Gibt die Tweens zurück. */
+  function live(root, gsap, { halo = true } = {}) {
+    const tws = [];
+    const flame = root.querySelector('.v-flame');
+    const ring = root.querySelector('.v-halo');
+    const embers = root.querySelector('.v-embers');
+    tws.push(gsap.to(flame, { scaleX: 'random(0.9, 1.07)', scaleY: 'random(0.9, 1.12)', duration: 'random(0.08, 0.22)', ease: 'sine.inOut', repeat: -1, repeatRefresh: true, transformOrigin: '50% 100%' }));
+    if (halo) tws.push(gsap.to(ring, { scale: 1.06, opacity: .8, duration: 1.8, yoyo: true, repeat: -1, ease: 'sine.inOut', transformOrigin: '50% 50%' }));
+    embers.innerHTML = '';
+    for (let i = 0; i < 7; i++) {
+      const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      const x0 = 200 + (Math.random() - .5) * 14;
+      c.setAttribute('r', (1.4 + Math.random() * 1.8).toFixed(1));
+      c.setAttribute('fill', i % 2 ? '#f6c400' : '#e8843a');
+      c.setAttribute('cx', x0.toFixed(1));
+      c.setAttribute('cy', '70');
+      c.setAttribute('opacity', '0');
+      embers.appendChild(c);
+      tws.push(gsap.fromTo(c, { attr: { cx: x0, cy: 70 }, opacity: 1 },
+        { attr: { cx: x0 + (Math.random() - .5) * 70, cy: -90 - Math.random() * 60 }, opacity: 0, duration: 2 + Math.random() * 1.6, ease: 'power1.out', repeat: -1, delay: Math.random() * 2.4 }));
+    }
+    return tws;
+  }
+
+  window.AlpenVessel = { COLORS, STUB_COLORS, vesselMarkup, stubMarkup, live };
 })();

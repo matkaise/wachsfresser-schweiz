@@ -13,12 +13,12 @@
   const chf = (v) => `CHF ${Number(v).toFixed(2)}`;
 
   let count = 0;
-  function addToCart(id, sourceEl) {
+  function addToCart(id, sourceEl, qty = 1) {
     const M = window.WFMotion;
     const commit = () => {
-      count += 1;
+      count += qty;
       document.querySelectorAll('.cart-count').forEach(el => { el.textContent = count; });
-      toast(`${PRODUCTS[id].name} · ${PRODUCTS[id].color} liegt im Warenkorb`);
+      toast(`${qty > 1 ? qty + ' × ' : ''}${PRODUCTS[id].name} · ${PRODUCTS[id].color} ${qty > 1 ? 'liegen' : 'liegt'} im Warenkorb`);
     };
     if (M && M.enabled && sourceEl) M.flyToCart(sourceEl).then(commit);
     else { commit(); if (M) M.bumpCart(); }
@@ -47,7 +47,8 @@
         const id = btn.dataset.add;
         const scope = btn.closest('[data-product]') || document;
         const src = scope.querySelector('[data-fly]');
-        addToCart(id, src);
+        const qtyEl = btn.dataset.qty ? document.querySelector(btn.dataset.qty) : null;
+        addToCart(id, src, qtyEl ? Math.max(1, parseInt(qtyEl.textContent, 10) || 1) : 1);
         if (btn.dataset.done) {
           const old = btn.textContent;
           btn.textContent = btn.dataset.done;

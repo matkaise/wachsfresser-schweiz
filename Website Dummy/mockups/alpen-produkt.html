@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Wachsfresser · Alpenplakat · Produkt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap"/>
+<link rel="stylesheet" href="alpen.css"/>
+<style>
+/* Layout: echte Fotos links und gross, Kaufbox rechts mitlaufend; darunter Erklärung, Szene, Daten als Wegweiser */
+.pp { padding-block: clamp(20px, 3vw, 36px) 0; }
+.crumbs { display: flex; flex-wrap: wrap; gap: 10px; color: #55606c; margin-bottom: clamp(16px, 2.4vw, 28px); }
+.crumbs a:hover { color: var(--sun); }
+.crumbs [aria-current] { color: var(--ink); }
+.pp-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(28px, 5vw, 72px); align-items: start; }
+
+/* Galerie */
+.gallery { position: sticky; top: 84px; display: grid; gap: 14px; }
+.stage { position: relative; aspect-ratio: 1 / 1; border-radius: 6px; overflow: hidden; background: #f2efe9; cursor: zoom-in; }
+.stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform-origin: var(--zx, 50%) var(--zy, 50%); transition: transform .5s var(--ease); }
+.stage.zoom img { transform: scale(1.8); }
+.stage-frame { position: absolute; inset: 12px; border: 2px solid rgba(28, 40, 55, .28); border-radius: 3px; pointer-events: none; z-index: 2; }
+.stage-cap { position: absolute; z-index: 2; left: 22px; bottom: 20px; padding: 6px 12px; border-radius: 999px; background: rgba(251, 247, 239, .92); font-size: 13px; font-weight: 500; }
+.stage-nav { position: absolute; z-index: 2; right: 18px; bottom: 16px; display: flex; gap: 6px; }
+.stage-nav button { width: 40px; height: 40px; border-radius: 50%; background: rgba(251, 247, 239, .92); font-size: 16px; transition: background .3s; }
+.stage-nav button:hover { background: var(--sign); }
+.thumbs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.thumbs button { aspect-ratio: 1 / 1; border-radius: 4px; overflow: hidden; background: #f2efe9; position: relative; }
+.thumbs button img { transition: filter .3s; filter: saturate(.7) brightness(1.04); }
+.thumbs button:hover img, .thumbs button[aria-current="true"] img { filter: none; }
+.thumbs button img { width: 100%; height: 100%; object-fit: cover; }
+.thumbs button[aria-current="true"]::after { content: ''; position: absolute; inset: 0; border-radius: 4px; box-shadow: inset 0 0 0 3px var(--ink); }
+
+/* Kaufbox */
+.buy { display: grid; gap: 20px; }
+.badge { display: inline-flex; align-items: center; gap: 12px; width: fit-content; padding: 6px 16px 6px 6px; border-radius: 999px; background: var(--tint, #f1d3a6); }
+.badge svg { width: 44px; height: 26px; border-radius: 999px; background: var(--snow); }
+.buy h1 { font-weight: 700; text-transform: uppercase; letter-spacing: .12em; font-size: clamp(44px, 6vw, 88px); line-height: .92; }
+.buy h1 small { display: block; margin-top: 12px; font-size: 14px; letter-spacing: .2em; font-weight: 500; }
+.price-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-block: 14px; border-block: 1px solid rgba(28, 40, 55, .14); }
+.price { font-size: 34px; font-weight: 600; }
+.stock { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
+.stock::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: #3f8f5b; box-shadow: 0 0 0 0 rgba(63, 143, 91, .5); animation: pulse 2.2s infinite; }
+@keyframes pulse { 70% { box-shadow: 0 0 0 9px rgba(63, 143, 91, 0); } 100% { box-shadow: 0 0 0 0 rgba(63, 143, 91, 0); } }
+.lead { font-size: 18px; }
+.lead em { font-family: var(--serif); font-size: 1.1em; color: var(--sun); }
+.warn { position: relative; width: fit-content; padding: 10px 34px 10px 16px; background: var(--sign); color: #111; font-weight: 600; clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%); }
+.label { display: block; margin-bottom: 10px; }
+.colors { display: flex; flex-wrap: wrap; gap: 10px; }
+.color { display: inline-flex; align-items: center; gap: 10px; padding: 6px 16px 6px 6px; border-radius: 999px; box-shadow: inset 0 0 0 1.5px rgba(28, 40, 55, .25); font-weight: 500; transition: box-shadow .3s, background .3s; }
+.color img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: #f2efe9; }
+.color[aria-current="true"] { background: #fff; box-shadow: inset 0 0 0 2px var(--ink); }
+.color:hover { box-shadow: inset 0 0 0 2px var(--ink); }
+.actions { display: flex; gap: 12px; }
+.qty { display: inline-flex; align-items: center; border-radius: 999px; box-shadow: inset 0 0 0 1.5px var(--ink); }
+.qty button { width: 46px; height: 52px; font-size: 18px; }
+.qty span { min-width: 26px; text-align: center; font-weight: 600; }
+.actions .btn { flex: 1; justify-content: center; }
+.trust { display: grid; gap: 10px; padding: 18px 20px; border-radius: 6px; background: #f3ece0; font-size: 15px; }
+.trust div { display: flex; gap: 12px; align-items: center; }
+.trust svg { flex-shrink: 0; width: 22px; height: 22px; }
+.acc { border-top: 1px solid rgba(28, 40, 55, .14); }
+.acc details { border-bottom: 1px solid rgba(28, 40, 55, .14); }
+.acc summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 18px 0; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; font-size: 14px; }
+.acc summary::-webkit-details-marker { display: none; }
+.acc summary::after { content: '+'; font-size: 22px; font-weight: 400; transition: transform .4s var(--ease); }
+.acc details[open] summary::after { transform: rotate(45deg); }
+.acc .body { padding-bottom: 18px; display: grid; gap: 8px; max-width: 60ch; }
+.acc ul { padding-left: 20px; display: grid; gap: 6px; }
+
+/* So funktioniert's, kompakt */
+.how { margin-top: clamp(72px, 9vw, 128px); border-radius: 6px; overflow: hidden; background: linear-gradient(180deg, #f2c995 0%, var(--dawn) 50%, #f8eadb 100%); display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(24px, 4vw, 64px); align-items: center; padding: clamp(28px, 5vw, 64px); }
+.how svg { width: 100%; max-width: 420px; height: auto; overflow: visible; display: block; margin-inline: auto; }
+.how-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 24px; }
+.how-steps div { padding-top: 14px; border-top: 2px solid var(--ink); }
+.how-steps b { display: block; font-size: 18px; margin-bottom: 4px; }
+.how-stubs { opacity: 0; }
+
+/* Szene mit echtem Foto */
+.scene { position: relative; margin-top: clamp(72px, 9vw, 128px); border-radius: 6px; overflow: hidden; aspect-ratio: 21 / 9; }
+.scene img { width: 100%; height: 100%; object-fit: cover; }
+.scene figcaption { position: absolute; left: clamp(20px, 3vw, 40px); bottom: clamp(20px, 3vw, 40px); max-width: 30ch; padding: 18px 22px; border-radius: 6px; background: rgba(251, 247, 239, .94); font-family: var(--serif); font-style: italic; font-size: clamp(20px, 2vw, 28px); line-height: 1.2; }
+
+/* Daten als Wegweiser */
+.specs { margin-top: clamp(72px, 9vw, 128px); }
+.posts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 24px; margin-top: 28px; }
+@media (max-width: 700px) { .posts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.post { position: relative; padding-left: 14px; }
+.post::before { content: ''; position: absolute; left: 0; top: -10px; bottom: -14px; width: 6px; border-radius: 3px; background: #8b97a3; }
+.post .sign { background: var(--sign); color: #111; padding: 10px 30px 10px 14px; clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%); transform-origin: left center; }
+.post .sign span { display: block; font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; }
+.post .sign b { font-size: 18px; }
+
+/* Passt dazu */
+.cross { margin-top: clamp(72px, 9vw, 128px); display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 56px); align-items: center; border-radius: 6px; overflow: hidden; padding: clamp(24px, 4vw, 48px); }
+.cross .pic { aspect-ratio: 4 / 3; border-radius: 999px 999px 6px 6px; overflow: hidden; background: var(--snow); }
+.cross .pic img { width: 100%; height: 100%; object-fit: cover; }
+.cross h2 { font-weight: 700; text-transform: uppercase; letter-spacing: .14em; font-size: clamp(30px, 3.6vw, 52px); line-height: 1; }
+.cross p { margin-block: 12px 20px; max-width: 42ch; }
+
+/* Mobile Kaufleiste */
+.mbar { position: fixed; z-index: 58; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); display: none; align-items: center; gap: 12px; padding: 10px 10px 10px 16px; border-radius: 18px; background: var(--ink); color: var(--snow); box-shadow: 0 20px 40px -16px rgba(28, 40, 55, .6); transform: translateY(160%); transition: transform .5s var(--ease); }
+.mbar.show { transform: none; }
+.mbar div { flex: 1; min-width: 0; line-height: 1.25; }
+.mbar b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mbar span { color: var(--sign); }
+
+@media (max-width: 900px) {
+  .pp-grid, .how, .cross { grid-template-columns: 1fr; }
+  .gallery { position: static; }
+  .how-steps { grid-template-columns: 1fr; }
+  .scene { aspect-ratio: 4 / 3; }
+  .mbar { display: flex; }
+  .stage { cursor: default; }
+}
+</style>
+</head>
+<body>
+<div id="nav-slot"></div>
+
+<main class="pp">
+  <div class="wrap">
+    <nav class="crumbs caps" aria-label="Pfad"><a href="alpen.html">Start</a><span>/</span><a href="alpen-shop.html">Shop</a><span>/</span><span aria-current="page" id="crumb">Säntis</span></nav>
+
+    <div class="pp-grid" data-product>
+      <div class="gallery">
+        <div class="stage" id="stage">
+          <img id="main-img" data-fly src="../assets/product/saentis-creme.jpg" alt=""/>
+          <div class="stage-frame" aria-hidden="true"></div>
+          <span class="stage-cap" id="stage-cap"></span>
+          <div class="stage-nav">
+            <button type="button" id="g-prev" aria-label="Vorheriges Bild">←</button>
+            <button type="button" id="g-next" aria-label="Nächstes Bild">→</button>
+          </div>
+        </div>
+        <div class="thumbs" id="thumbs" role="group" aria-label="Bilder"></div>
+      </div>
+
+      <div class="buy">
+        <span class="badge caps" id="badge"></span>
+        <h1 id="title">Säntis<small>Wachsfresser kompakt · Creme</small></h1>
+        <div class="price-row"><span class="price num" id="price">CHF 14.99</span><span class="stock">Auf Lager</span></div>
+        <p class="lead" id="lead"></p>
+        <div class="warn" id="warn" hidden>Nur für den Aussenbereich</div>
+        <div>
+          <span class="label caps" id="color-label">Farbe · Creme</span>
+          <div class="colors" id="colors"></div>
+        </div>
+        <div class="actions" id="actions">
+          <div class="qty" aria-label="Menge"><button type="button" id="minus" aria-label="Weniger">−</button><span id="qty" class="num">1</span><button type="button" id="plus" aria-label="Mehr">+</button></div>
+          <button class="btn btn-sun" type="button" id="add" data-add="saentis-creme" data-qty="#qty" data-done="✓ Im Korb" data-magnetic>In den Korb</button>
+        </div>
+        <div class="trust">
+          <div><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M11 2c.6 2.4 3.4 3.6 3.4 7a3.4 3.4 0 0 1-6.8 0c0-1.6.8-2.6 1.6-3.2.1 1.1.6 1.7 1.3 2 0-2 0-3.6.5-5.8Z" fill="#e8843a"/><rect x="6" y="13" width="10" height="7" rx="2" fill="#30506f"/></svg>Einsatzbereit mit Docht und Sojawachs-Startfüllung</div>
+          <div><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M2 18 9 7l4 6 3-3 4 8Z" fill="#30506f"/></svg>Handgegossen in Salmsach · Farbe und Oberfläche können leicht variieren</div>
+          <div><svg viewBox="0 0 22 22" aria-hidden="true"><rect x="2" y="6" width="11" height="9" rx="1" fill="#30506f"/><path d="M13 9h4l3 3v3h-7Z" fill="#30506f"/><circle cx="6" cy="17" r="2" fill="#e8843a"/><circle cx="16" cy="17" r="2" fill="#e8843a"/></svg>Versand Schweiz in der Regel ca. 3 Werktage</div>
+        </div>
+        <div class="acc" id="acc"></div>
+      </div>
+    </div>
+
+    <section class="how" aria-labelledby="how-h">
+      <div aria-hidden="true"><svg viewBox="-60 -60 540 520"><g id="hw"></g><g class="how-stubs"></g></svg></div>
+      <div>
+        <span class="kicker caps">So funktioniert’s</span>
+        <h2 class="sec-h" id="how-h">Wachsreste rein, Licht raus</h2>
+        <div class="how-steps">
+          <div><b>Nachlegen</b>Geeignete Reste bis etwa 1 cm unter den Docht.</div>
+          <div><b>Anzünden</b>Der Dauerdocht bleibt im Gefäss.</div>
+          <div><b>Weiterbrennen</b>Die Reste schmelzen zur neuen Füllung.</div>
+        </div>
+      </div>
+    </section>
+
+    <figure class="scene"><img class="par" id="scene-img" src="../assets/product/saentis-indoor-scene.jpg" alt=""/><figcaption>Das Gefäss bleibt. Du legst Wachs nach, und das Licht kommt zurück.</figcaption></figure>
+
+    <section class="specs" aria-labelledby="sp-h">
+      <span class="kicker caps">Auf einen Blick</span>
+      <h2 class="sec-h" id="sp-h">Die Daten</h2>
+      <div class="posts" id="posts"></div>
+    </section>
+
+    <section class="cross" id="cross" data-product></section>
+  </div>
+</main>
+<div id="foot-slot" style="margin-top: clamp(48px, 6vw, 80px)"></div>
+
+<div class="mbar" id="mbar" aria-hidden="true" data-product>
+  <div><b id="mb-name">Säntis · Creme</b><span class="num" id="mb-price">CHF 14.99</span></div>
+  <button class="btn btn-sun" type="button" id="mb-add" data-add="saentis-creme" data-done="✓ Im Korb" tabindex="-1">In den Korb</button>
+</div>
+
+<script src="https://unpkg.com/gsap@3.13.0/dist/gsap.min.js" integrity="sha384-HOvlOYPIs/zjoIkWUGXkVmXsjr8GuZLV+Q+rcPwmJOVZVpvTSXQChiN4t9Euv9Vc" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/gsap@3.13.0/dist/ScrollTrigger.min.js" integrity="sha384-P8VzCVnT9NBUkMrpcIZrJbA7EBjJvh/fJS6PmP+4nLIM284DtsImIv8D0fFjIkeh" crossorigin="anonymous"></script>
+<script src="../motion.js"></script>
+<script src="mockup-kit.js"></script>
+<script src="alpen-vessel.js"></script>
+<script src="alpen-data.js"></script>
+<script>
+(function () {
+  const { MODELS, DETAILS, nav, footer, idParts } = ALPEN;
+  const { PRODUCTS, chf } = MK;
+  const M = window.WFMotion;
+  const anim = !!(M && M.enabled);
+  const gsap = M && M.gsap;
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  $('#nav-slot').outerHTML = nav('shop');
+  $('#foot-slot').innerHTML = footer();
+
+  let id = 'saentis-creme';
+  let view = 0;
+  let howTl = null;
+  let howSt = null;
+  let flameTws = [];
+
+  function readId() {
+    const h = location.hash.replace('#', '');
+    return PRODUCTS[h] ? h : 'saentis-creme';
+  }
+
+  /* Galerie */
+  function showImage(i, instant) {
+    const g = DETAILS[id].gallery;
+    view = (i + g.length) % g.length;
+    const img = $('#main-img');
+    const set = () => { img.src = g[view].src; img.alt = `${PRODUCTS[id].name} · ${g[view].label}`; $('#stage-cap').textContent = g[view].label; };
+    $$('#thumbs button').forEach((b, k) => b.setAttribute('aria-current', String(k === view)));
+    if (!anim || instant) return set();
+    gsap.to(img, { opacity: 0, scale: 1.04, duration: .22, ease: 'power2.in', onComplete: () => { set(); gsap.fromTo(img, { opacity: 0, scale: 1.04 }, { opacity: 1, scale: 1, duration: .6, ease: 'expo.out', clearProps: 'transform' }); } });
+  }
+
+  /* Ganze Seite für die gewählte Ausführung aufbauen */
+  function render(first) {
+    id = readId();
+    const p = PRODUCTS[id];
+    const { model, color } = idParts(id);
+    const m = MODELS[model];
+    const d = DETAILS[id];
+    document.title = `${p.name} · ${p.color} · Wachsfresser`;
+    $('#crumb').textContent = `${p.name} · ${p.color}`;
+    document.documentElement.style.setProperty('--tint', m.tint);
+    $('#badge').innerHTML = `<svg viewBox="0 0 400 80" preserveAspectRatio="none" aria-hidden="true"><polygon fill="#30506f" points="${m.ridge}"/></svg>${m.name} · ${m.alt} m ü. M.`;
+    $('#title').innerHTML = `${p.name}<small>${m.kind} · ${p.color}</small>`;
+    $('#price').textContent = chf(p.price);
+    $('#lead').innerHTML = `${m.claim} <em>Wachsreste rein, Licht raus.</em>`;
+    $('#warn').hidden = !m.outdoorOnly;
+    $('#color-label').textContent = `Farbe · ${p.color}`;
+    $('#colors').innerHTML = ['creme', 'anthrazit'].map(c => {
+      const q = PRODUCTS[`${model}-${c}`];
+      return `<a class="color" href="#${model}-${c}" aria-current="${c === color}"><img src="${q.img}" alt=""/>${q.color}</a>`;
+    }).join('');
+    $('#add').dataset.add = id;
+    $('#mb-add').dataset.add = id;
+    $('#mb-name').textContent = `${p.name} · ${p.color}`;
+    $('#mb-price').textContent = chf(p.price);
+    $('#qty').textContent = '1';
+    $('#thumbs').innerHTML = d.gallery.map((g, k) => `<button type="button" aria-label="${g.label}" aria-current="${k === 0}"><img src="${g.src}" alt=""/></button>`).join('');
+    $$('#thumbs button').forEach((b, k) => b.addEventListener('click', () => showImage(k)));
+    showImage(0, true);
+    $('#scene-img').src = m.scene;
+    $('#scene-img').alt = m.sceneAlt;
+
+    const care = [
+      'Wachsfresser nur auf eine stabile, hitzebeständige Unterlage stellen.',
+      'Wachsreste nur bis etwa 1 cm unter den Docht nachfüllen.',
+      'Brennenden Wachsfresser nie unbeaufsichtigt lassen.',
+      'Russ am Docht vorsichtig entfernen, sobald alles vollständig ausgekühlt ist.',
+    ];
+    $('#acc').innerHTML = `
+      <details open><summary>Beschreibung</summary><div class="body"><p>${d.long}</p></div></details>
+      <details><summary>Lieferumfang</summary><div class="body"><ul><li>Betongefäss, von Hand gegossen</li><li>${m.wick}</li><li>Sojawachs-Startfüllung</li>${model === 'eiger' ? '<li>Holzdeckel</li>' : ''}</ul></div></details>
+      <details><summary>Nutzung &amp; Pflege</summary><div class="body"><ul>${care.map(c => `<li>${c}</li>`).join('')}</ul></div></details>
+      <details><summary>Versand</summary><div class="body"><p>Versand in der Schweiz dauert in der Regel rund 3 Werktage. Europaweiter Versand ist grundsätzlich möglich; die Versandkosten werden im Checkout angezeigt.</p></div></details>`;
+
+    const specs = [['Docht', m.wick], ['Füllung', 'Sojawachs'], ['Deckel', m.lid], ['Herkunft', 'Salmsach TG'], ['Einsatz', m.outdoorOnly ? 'Nur aussen' : 'Kompakt'], ['Brenndauer', 'Test läuft']];
+    $('#posts').innerHTML = specs.map(([k, v]) => `<div class="post"><div class="sign"><span>${k}</span><b>${v}</b></div></div>`).join('');
+
+    const otherModel = model === 'saentis' ? 'eiger' : 'saentis';
+    const oid = `${otherModel}-${color}`;
+    const o = PRODUCTS[oid];
+    const om = MODELS[otherModel];
+    $('#cross').style.background = om.tint;
+    $('#cross').innerHTML = `<div class="pic"><img data-fly src="${o.img}" alt="${o.name} in ${o.color}"/></div>
+      <div><span class="kicker caps">Passt dazu</span><h2>${o.name}</h2><p>${om.claim} Mit ${om.wick}${otherModel === 'eiger' ? ' und Holzdeckel' : ''}.</p>
+      <div class="btns"><a class="btn btn-ink" href="#${oid}">${o.name} ansehen</a><button class="btn btn-ghost" type="button" data-add="${oid}" data-done="✓ Im Korb">${chf(o.price)} · In den Korb</button></div></div>`;
+    MK.wire($('#cross'));
+
+    // Illustration passend zum Modell
+    $('#hw').innerHTML = AlpenVessel.vesselMarkup('hw', { model, color });
+    $('.how-stubs').innerHTML = [0, 1, 2].map(AlpenVessel.stubMarkup).join('');
+    setupHow();
+
+    if (!first && anim) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      gsap.from('.buy > *', { y: 24, opacity: 0, duration: .8, stagger: .05, ease: 'expo.out' });
+    }
+  }
+
+  /* Kleine Endlos-Szene: Reste fallen hinein, Flamme zündet */
+  function setupHow() {
+    if (!anim) return;
+    if (howTl) howTl.kill();
+    if (howSt) howSt.kill();
+    flameTws.forEach(t => t.kill());
+    flameTws = AlpenVessel.live($('#hw'), gsap);
+    const stubs = $$('.how-stubs .v-stub');
+    gsap.set('.how-stubs', { opacity: 1 });
+    gsap.set('#hw .v-wind', { transformOrigin: '50% 100%' });
+    howTl = gsap.timeline({ repeat: -1, repeatDelay: 1.6, paused: true });
+    howTl.to('#hw .v-wind', { scale: 0, duration: .5, ease: 'power2.in' })
+      .to('#hw .v-halo', { opacity: .2, duration: .5 }, '<');
+    stubs.forEach((s, i) => {
+      howTl.fromTo(s, { x: 90 + i * 110, y: -120, rotation: -30 + i * 30, opacity: 1, scale: 1 }, { x: 200, y: 176, rotation: 0, duration: .6, ease: 'power2.in', immediateRender: false }, `>-${i ? .25 : 0}`)
+        .to(s, { scale: .3, opacity: 0, duration: .15, transformOrigin: '50% 100%' }, '>')
+        .fromTo('#hw .v-wax', { scaleY: 1 }, { scaleY: 1.3, duration: .12, yoyo: true, repeat: 1, transformOrigin: '50% 50%' }, '<');
+    });
+    howTl.to('#hw .v-wind', { scale: 1, duration: .9, ease: 'elastic.out(1, .45)' }, '+=.2')
+      .to('#hw .v-halo', { opacity: 1, duration: .8 }, '<')
+      .to({}, { duration: 2.4 });
+    gsap.set(stubs, { opacity: 0 });
+    howSt = M.ScrollTrigger.create({ trigger: '.how', start: 'top 80%', end: 'bottom 10%', onToggle: self => self.isActive ? howTl.play() : howTl.pause() });
+  }
+
+  /* Galerie: Zoom, Pfeile, Wischen */
+  const stage = $('#stage');
+  $('#g-prev').addEventListener('click', e => { e.stopPropagation(); showImage(view - 1); });
+  $('#g-next').addEventListener('click', e => { e.stopPropagation(); showImage(view + 1); });
+  if (M && M.finePointer) {
+    stage.addEventListener('pointermove', e => {
+      const r = stage.getBoundingClientRect();
+      stage.style.setProperty('--zx', `${((e.clientX - r.left) / r.width) * 100}%`);
+      stage.style.setProperty('--zy', `${((e.clientY - r.top) / r.height) * 100}%`);
+    });
+    stage.addEventListener('click', e => { if (!e.target.closest('button')) stage.classList.toggle('zoom'); });
+    stage.addEventListener('pointerleave', () => stage.classList.remove('zoom'));
+  }
+  let sx = null;
+  stage.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+  stage.addEventListener('touchend', e => { if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 40) showImage(view + (dx < 0 ? 1 : -1)); sx = null; });
+
+  /* Menge */
+  $('#minus').addEventListener('click', () => { $('#qty').textContent = Math.max(1, +$('#qty').textContent - 1); });
+  $('#plus').addEventListener('click', () => { $('#qty').textContent = Math.min(9, +$('#qty').textContent + 1); });
+
+  /* Mobile Kaufleiste, sobald der Hauptbutton aus dem Bild ist */
+  const mbar = $('#mbar');
+  new IntersectionObserver(([e]) => {
+    const show = !e.isIntersecting && e.boundingClientRect.top < 0;
+    mbar.classList.toggle('show', show);
+    mbar.setAttribute('aria-hidden', String(!show));
+    $('#mb-add').tabIndex = show ? 0 : -1;
+  }).observe($('#actions'));
+
+  render(true);
+  window.addEventListener('hashchange', () => render(false));
+  MK.wire($('.pp-grid'));
+  MK.wire($('#mbar'));
+  MK.wire($('.how'));
+  if (!anim) return;
+
+  gsap.timeline({ defaults: { ease: 'expo.out' } })
+    .from('.stage', { clipPath: 'inset(8% 8% 8% 8% round 6px)', duration: 1.3 })
+    .from('#main-img', { scale: 1.15, duration: 1.6 }, 0)
+    .from('.thumbs button', { y: 20, opacity: 0, duration: .8, stagger: .06 }, .3)
+    .from('.buy > *', { y: 28, opacity: 0, duration: 1, stagger: .06 }, .15);
+  gsap.from('.post .sign', { rotate: -12, x: -24, opacity: 0, duration: 1.1, stagger: .08, ease: 'elastic.out(1, .55)', scrollTrigger: { trigger: '.posts', start: 'top 85%' } });
+  gsap.fromTo('.scene img', { yPercent: -8, scale: 1.15 }, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: '.scene', start: 'top bottom', end: 'bottom top', scrub: true } });
+  gsap.from('.scene figcaption', { y: 30, opacity: 0, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: '.scene', start: 'top 70%' } });
+  gsap.from('.cross', { y: 50, opacity: 0, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '.cross', start: 'top 85%' } });
+})();
+</script>
+</body>
+</html>

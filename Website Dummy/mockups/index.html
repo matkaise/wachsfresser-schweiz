@@ -46,6 +46,13 @@ header p { color: var(--muted); font-size: 17px; }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin-top: 4px; }
 .tags li { font-size: 12px; padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); }
 .open { margin-top: 8px; font-weight: 500; color: var(--accent); }
+.set { margin-top: clamp(24px, 3vw, 32px); display: grid; grid-template-columns: 1fr auto; gap: 24px 48px; align-items: center; padding: clamp(22px, 3vw, 32px); background: var(--card); border: 1px solid var(--accent); }
+.set h2 { font-family: var(--display); font-weight: 400; font-size: 30px; line-height: 1.1; margin-block: 6px 8px; }
+.set p { color: var(--muted); max-width: 56ch; }
+.set-links { display: grid; grid-template-columns: repeat(2, auto); gap: 10px 28px; }
+.set-links a { font-weight: 500; color: var(--accent); text-decoration: none; }
+.set-links a:hover { text-decoration: underline; }
+@media (max-width: 760px) { .set { grid-template-columns: 1fr; } .set-links { grid-template-columns: 1fr 1fr; } }
 footer { margin-top: clamp(32px, 5vw, 56px); padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; max-width: 70ch; }
 @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .thumb img { transition: none; } }
@@ -97,6 +104,20 @@ footer { margin-top: clamp(32px, 5vw, 56px); padding-top: 20px; border-top: 1px 
       </div>
     </a>
   </main>
+
+  <section class="set" aria-labelledby="set-h">
+    <div>
+      <span class="eyebrow">Favorit · ausgebaut</span>
+      <h2 id="set-h">Alpenplakat als ganzer Shop</h2>
+      <p>Startseite, Shop und Produktseite im gleichen Stil, mit echten Produktfotos und funktionierendem Demo-Warenkorb.</p>
+    </div>
+    <nav class="set-links" aria-label="Alpenplakat-Seiten">
+      <a href="alpen.html">Startseite →</a>
+      <a href="alpen-shop.html">Shop →</a>
+      <a href="alpen-produkt.html#saentis-creme">Produktseite Säntis →</a>
+      <a href="alpen-produkt.html#eiger-anthrazit">Produktseite Eiger →</a>
+    </nav>
+  </section>
 
   <footer>
     In allen Studien gleich: Produktbild fliegt in den Warenkorb, Buttons folgen leicht dem Cursor, Produktbilder neigen sich beim Überfahren, Inhalte blenden beim Scrollen ein. Bei „reduzierte Bewegung“ bleiben die Seiten ruhig.

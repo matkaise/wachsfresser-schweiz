@@ -7,45 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap"/>
+<link rel="stylesheet" href="alpen.css"/>
 <style>
 /* Layout: Reiseplakat der 1930er – der Wachsfresser steht als Hauptmotiv auf dem Gipfelplateau, seine Flamme ist die Sonne */
-:root {
-  --dawn: #f6dfbd;
-  --snow: #fbf7ef;
-  --far: #bccbd9;
-  --mid: #7d9bb8;
-  --near: #30506f;
-  --ink: #1c2837;
-  --sun: #e8843a;
-  --sign: #f6c400;
-  --dusk: #1f3048;
-  --sans: 'Jost', 'Futura', 'Century Gothic', sans-serif;
-  --serif: 'Newsreader', Georgia, serif;
-  --gut: clamp(16px, 3vw, 40px);
-  --ease: cubic-bezier(.16, 1, .3, 1);
-  color-scheme: light;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { background: var(--snow); color: var(--ink); font-family: var(--sans); font-size: 17px; line-height: 1.55; overflow-x: hidden; }
-img { display: block; max-width: 100%; }
-a { color: inherit; text-decoration: none; }
-button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
-:focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; }
-.wrap { max-width: 1400px; margin: 0 auto; padding-inline: var(--gut); }
-.caps { text-transform: uppercase; letter-spacing: .22em; font-weight: 500; font-size: 12px; }
-.num { font-variant-numeric: tabular-nums; }
-
-/* Navigation */
-.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: color-mix(in srgb, var(--snow) 90%, transparent); backdrop-filter: blur(8px); }
-.nav .wrap { display: flex; align-items: center; justify-content: space-between; min-height: 64px; gap: 16px; }
-.brand { font-weight: 700; letter-spacing: .3em; text-transform: uppercase; font-size: 15px; }
-.nav-links { display: flex; gap: 32px; list-style: none; }
-.nav-links a:hover { color: var(--sun); }
-.cart-btn { position: relative; display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 999px; background: var(--ink); color: var(--snow); }
-.cart-count { display: inline-grid; place-items: center; min-width: 22px; height: 22px; border-radius: 50%; background: var(--sun); color: var(--ink); font-size: 12px; font-weight: 700; letter-spacing: 0; }
-.cart-btn.is-bumped::after { content: ''; position: absolute; inset: -4px; border-radius: 999px; border: 2px solid var(--sun); animation: ring .7s var(--ease) forwards; }
-@keyframes ring { to { opacity: 0; transform: scale(1.25); } }
 
 /* Plakat-Hero */
 .poster { position: relative; margin: 0 var(--gut); border-radius: 6px; overflow: hidden; background: linear-gradient(180deg, #f2c995 0%, var(--dawn) 34%, #f8eadb 60%, #f3e3cf 100%); }
@@ -77,21 +41,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .dots button { width: 26px; height: 26px; border-radius: 50%; position: relative; box-shadow: inset 0 0 0 1px rgba(255,255,255,.3); }
 .dots button[aria-pressed="true"]::after { content: ''; position: absolute; inset: -5px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--sign); }
 
-.btns { display: flex; flex-wrap: wrap; gap: 12px; }
-.btn { display: inline-flex; align-items: center; gap: 12px; padding: 15px 24px; border-radius: 999px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: 13px; transition: background .3s, color .3s; }
-.btn-ink { background: var(--ink); color: var(--snow); }
-.btn-ink:hover { background: var(--sun); color: var(--ink); }
-.btn-ghost { box-shadow: inset 0 0 0 2px var(--ink); }
-.btn-ghost:hover { background: var(--ink); color: var(--snow); }
-.btn-sun { background: var(--sun); color: var(--ink); }
-.btn-sun:hover { background: var(--sign); }
 
 /* So funktioniert's: gepinnte Szene */
 .explain { background: var(--snow); color: var(--ink); }
 .ex-pin { min-height: calc(100vh - 64px); display: flex; align-items: center; padding-block: 40px; }
 .ex-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: clamp(24px, 5vw, 80px); align-items: center; width: 100%; }
-.kicker { display: block; color: var(--sun); margin-bottom: 14px; }
-.sec-h { font-weight: 600; text-transform: uppercase; letter-spacing: .08em; font-size: clamp(30px, 4.2vw, 58px); line-height: 1.02; text-wrap: balance; max-width: 18ch; }
 .ex-steps { list-style: none; margin-top: clamp(24px, 3vw, 40px); display: grid; gap: 4px; position: relative; }
 .ex-steps::before { content: ''; position: absolute; left: 17px; top: 18px; bottom: 18px; border-left: 2px dashed currentColor; opacity: .25; }
 .ex-step { position: relative; display: grid; grid-template-columns: 36px 1fr; gap: 16px; padding-block: 12px; opacity: .3; }
@@ -104,8 +58,23 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .motion-on .ex-stubs { opacity: 1; }
 html:not(.motion-on) .ex-step { opacity: 1; }
 
+/* Echte Bilder als Postkarten */
+.cards-real { padding-block: clamp(88px, 10vw, 140px) clamp(40px, 6vw, 80px); overflow: hidden; }
+.real-head { display: block; }
+.postcards { display: grid; grid-template-columns: 1.15fr .9fr 1fr; gap: clamp(20px, 3vw, 44px); align-items: start; margin-top: clamp(32px, 4vw, 56px); }
+.postcard { position: relative; display: grid; gap: 12px; padding: 12px 12px 16px; background: #fff; border-radius: 3px; box-shadow: 0 2px 0 rgba(28,40,55,.06), 0 24px 50px -24px rgba(28,40,55,.45); transition: rotate .6s var(--ease), translate .6s var(--ease), box-shadow .6s var(--ease); }
+.postcard:nth-child(1) { rotate: -2.5deg; }
+.postcard:nth-child(2) { rotate: 2deg; margin-top: 48px; }
+.postcard:nth-child(3) { rotate: -1.2deg; margin-top: 16px; }
+.postcard:hover { rotate: 0deg; translate: 0 -8px; box-shadow: 0 2px 0 rgba(28,40,55,.06), 0 36px 60px -24px rgba(28,40,55,.55); }
+.postcard img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 2px; }
+.postcard:nth-child(1) img { aspect-ratio: 1 / 1; }
+.pc-cap { font-family: var(--serif); font-style: italic; font-size: 19px; line-height: 1.25; padding-inline: 4px; }
+.stamp { position: absolute; top: 22px; right: 22px; width: 64px; display: grid; justify-items: center; rotate: 8deg; filter: drop-shadow(0 2px 3px rgba(0,0,0,.2)); }
+.stamp svg { width: 64px; height: auto; display: block; }
+.stamp b { margin-top: 2px; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.6); }
+
 /* Kollektion als zwei Plakate */
-.section { padding-block: clamp(64px, 9vw, 128px); }
 .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gut); margin-top: clamp(32px, 4vw, 56px); }
 .card { position: relative; border-radius: 6px; overflow: hidden; padding: clamp(24px, 3vw, 40px); display: grid; gap: 22px; }
 .card.saentis { background: #f1d3a6; }
@@ -157,16 +126,13 @@ html:not(.motion-on) .ex-step { opacity: 1; }
 .night .btns { position: relative; justify-content: center; }
 .night .btn-ghost { box-shadow: inset 0 0 0 2px var(--snow); }
 .night .btn-ghost:hover { background: var(--snow); color: var(--ink); }
-.foot { padding-block: 28px 40px; }
-.foot .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: #55606c; }
-
-.fly-ghost { position: fixed; z-index: 400; background-size: cover; background-position: center; border-radius: 50%; pointer-events: none; }
-.mk-toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 180%); background: var(--ink); color: var(--snow); padding: 14px 22px; border-radius: 999px; font-weight: 500; z-index: 60; transition: transform .5s var(--ease); max-width: calc(100vw - 32px); }
-.mk-toast.show { transform: translate(-50%, 0); }
 
 @media (max-width: 900px) {
   .nav-links { display: none; }
   .cards, .story { grid-template-columns: 1fr; }
+  .postcards { grid-template-columns: 1fr 1fr; }
+  .postcard:nth-child(1) { grid-column: 1 / -1; }
+  .postcard:nth-child(2) { margin-top: 0; }
   .signs { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 56px; }
   .poster-top { padding: 30px 28px 0; font-size: 10px; }
   .range { aspect-ratio: auto; height: 400px; margin-top: -10px; }
@@ -201,7 +167,7 @@ html:not(.motion-on) .ex-step { opacity: 1; }
     <a class="brand" href="#top">Wachsfresser</a>
     <ul class="nav-links caps">
       <li><a href="#prinzip">So funktioniert’s</a></li>
-      <li><a href="#kollektion">Kollektion</a></li>
+      <li><a href="alpen-shop.html">Shop</a></li>
       <li><a href="#entstehung">Entstehung</a></li>
     </ul>
     <button class="cart-btn caps" type="button" aria-label="Warenkorb">Korb <span class="cart-count num">0</span></button>
@@ -255,6 +221,30 @@ html:not(.motion-on) .ex-step { opacity: 1; }
     <button class="btn btn-sun" type="button" id="hb-add" data-add="saentis-creme" data-done="✓ Im Korb" data-magnetic>In den Korb</button>
   </div>
 
+  <section class="cards-real" aria-labelledby="real-h">
+    <div class="wrap">
+      <div class="real-head">
+        <span class="kicker caps">Echte Bilder</span>
+        <h2 class="sec-h" id="real-h">So sieht er in echt aus</h2>
+      </div>
+      <div class="postcards">
+        <a class="postcard" href="alpen-produkt.html#eiger-creme" data-speed="-6">
+          <img src="../assets/product/hero-outdoor-eiger.jpg" alt="Zwei brennende Eiger-Wachsfresser in Creme und Anthrazit auf einem Tisch im Freien"/>
+          <span class="pc-cap">Eiger in Creme und Anthrazit, draussen am Tisch</span>
+        </a>
+        <a class="postcard" href="alpen-produkt.html#saentis-creme" data-speed="4">
+          <img src="../assets/product/saentis-indoor-scene.jpg" alt="Säntis Wachsfresser in Creme brennt auf einem Holztisch"/>
+          <span class="pc-cap">Säntis in Creme, ein ruhiger Abend drinnen</span>
+          <span class="stamp" aria-hidden="true"><svg viewBox="0 0 60 70"><rect x="3" y="3" width="54" height="64" fill="#fbf7ef" stroke="#fbf7ef" stroke-width="6" stroke-dasharray="2 3"/><rect x="8" y="8" width="44" height="54" fill="#c7d6e4"/><polygon points="8,52 20,34 28,44 36,30 52,52 52,62 8,62" fill="#30506f"/><circle cx="40" cy="20" r="6" fill="#e8843a"/></svg><b>Schweiz</b></span>
+        </a>
+        <a class="postcard" href="alpen-produkt.html#eiger-anthrazit" data-speed="-3">
+          <img src="../assets/product/eiger-dinner-scene.jpg" alt="Eiger Wachsfresser bei einem Abendessen im Freien"/>
+          <span class="pc-cap">Eiger beim Abendessen unter Lichterketten</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <section class="explain" id="prinzip">
     <div class="ex-pin">
       <div class="wrap ex-grid">
@@ -300,7 +290,7 @@ html:not(.motion-on) .ex-step { opacity: 1; }
           </div>
           <div class="card-row">
             <span class="note">Glasfaserdocht · Sojawachs-Startfüllung</span>
-            <button class="btn btn-ink" type="button" data-add="saentis-creme" data-done="✓ Im Korb" data-magnetic>In den Korb</button>
+            <div class="btns"><a class="btn btn-ghost card-link" href="alpen-produkt.html#saentis-creme">Details</a><button class="btn btn-ink" type="button" data-add="saentis-creme" data-done="✓ Im Korb" data-magnetic>In den Korb</button></div>
           </div>
         </article>
         <article class="card eiger" data-product data-model="eiger" data-reveal data-delay=".1">
@@ -320,7 +310,7 @@ html:not(.motion-on) .ex-step { opacity: 1; }
           </div>
           <div class="card-row">
             <span class="note">Holzfaserdocht · nur Aussenbereich</span>
-            <button class="btn btn-ink" type="button" data-add="eiger-creme" data-done="✓ Im Korb" data-magnetic>In den Korb</button>
+            <div class="btns"><a class="btn btn-ghost card-link" href="alpen-produkt.html#eiger-creme">Details</a><button class="btn btn-ink" type="button" data-add="eiger-creme" data-done="✓ Im Korb" data-magnetic>In den Korb</button></div>
           </div>
         </article>
       </div>
@@ -528,6 +518,7 @@ html:not(.motion-on) .ex-step { opacity: 1; }
       $$('.swatch', card).forEach(o => o.setAttribute('aria-pressed', String(o === sw)));
       const id = `${model}-${sw.dataset.color}`;
       add.dataset.add = id;
+      $('.card-link', card).href = `alpen-produkt.html#${id}`;
       const p = MK.PRODUCTS[id];
       if (anim) gsap.to(img, { opacity: 0, scale: 1.05, duration: .25, onComplete: () => { img.src = p.img; img.alt = `${p.name} in ${p.color}`; gsap.to(img, { opacity: 1, scale: 1, duration: .5, ease: 'expo.out' }); } });
       else { img.src = p.img; img.alt = `${p.name} in ${p.color}`; }
@@ -583,6 +574,10 @@ html:not(.motion-on) .ex-step { opacity: 1; }
   // Die Glut läuft dauerhaft, wird aber erst mit der Flamme sichtbar
   gsap.set('#ev .v-embers', { opacity: 0 });
   ex.to('#ev .v-embers', { opacity: 1, duration: .5 }, '-=1.4');
+
+  /* Postkarten fliegen ein und schweben beim Scrollen unterschiedlich schnell */
+  gsap.from('.postcard', { y: 120, rotation: (i) => [-14, 12, -8][i], opacity: 0, duration: 1.3, stagger: .14, ease: 'expo.out', scrollTrigger: { trigger: '.postcards', start: 'top 85%' } });
+  $$('.postcard').forEach(pc => gsap.to(pc, { y: () => Number(pc.dataset.speed) * 10, ease: 'none', scrollTrigger: { trigger: '.postcards', start: 'top bottom', end: 'bottom top', scrub: true } }));
 
   /* Wegweiser, Bilder, Nachtplakat */
   gsap.from('.sign', { rotate: -14, x: -30, opacity: 0, duration: 1.2, stagger: .14, ease: 'elastic.out(1, .55)', scrollTrigger: { trigger: '.signs', start: 'top 80%' } });
